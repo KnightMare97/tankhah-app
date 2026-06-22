@@ -59,30 +59,36 @@
 <!-- Account Section -->
 <section class="flex flex-col gap-3">
 <h3 class="font-headline-sm text-headline-sm text-on-surface-variant px-1">حساب کاربری</h3>
-<div class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center justify-between text-right opacity-70">
+<div class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center justify-between text-right">
 <div class="flex items-center gap-3 flex-row-reverse">
 <div class="w-10 h-10 bg-surface-container rounded-full flex items-center justify-center">
 <span class="material-symbols-outlined text-on-surface-variant">person</span>
 </div>
 <div class="text-right">
-<div class="font-body-lg text-on-surface">اطلاعات پروفایل</div>
-<div class="text-xs text-on-surface-variant">ورود کاربری — به‌زودی</div>
+<div class="font-body-lg text-on-surface">حساب من</div>
+<div class="text-xs text-on-surface-variant" id="user-email" dir="ltr">—</div>
 </div>
 </div>
-<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+<span class="material-symbols-outlined text-secondary">verified_user</span>
 </div>
-<div class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center justify-between text-right">
+<button id="change-pw-btn" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center justify-between text-right active:bg-surface-container-low transition-colors">
 <div class="flex items-center gap-3 flex-row-reverse">
 <div class="w-10 h-10 bg-surface-container rounded-full flex items-center justify-center">
-<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant">password</span>
 </div>
-<div class="text-right">
-<div class="font-body-lg text-on-surface">اطلاعیه‌ها</div>
-<div class="text-xs text-on-surface-variant">فعال</div>
-</div>
+<div class="font-body-lg text-on-surface">تغییر رمز عبور</div>
 </div>
 <span class="material-symbols-outlined text-on-surface-variant">chevron_left</span>
+</button>
+<button id="logout-btn" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center justify-between text-right active:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3 flex-row-reverse">
+<div class="w-10 h-10 bg-surface-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-error">logout</span>
 </div>
+<div class="font-body-lg text-error">خروج از حساب</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_left</span>
+</button>
 </section>
 
 <!-- Reset -->
@@ -118,6 +124,7 @@
 <script src="./js/jdate.js"></script>
 <script src="./js/jalali-picker.js"></script>
 <script src="./js/supabase.js"></script>
+<script src="./js/auth.js"></script>
 <script src="./js/settings.js"></script>
 </body>
 </html>

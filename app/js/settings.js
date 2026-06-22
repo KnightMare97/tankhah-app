@@ -2,6 +2,26 @@
 (function () {
   const $ = (id) => document.getElementById(id);
 
+  // نمایش ایمیل کاربر + خروج + تغییر رمز
+  (async () => {
+    const { data: { user } } = await sb.auth.getUser();
+    if (user) $("user-email").textContent = user.email;
+  })();
+
+  $("logout-btn").addEventListener("click", async () => {
+    await sb.auth.signOut();
+    location.replace("./login.html");
+  });
+
+  $("change-pw-btn").addEventListener("click", async () => {
+    const pw = prompt("رمز عبور جدید (حداقل ۶ کاراکتر):");
+    if (!pw) return;
+    if (pw.length < 6) return toast("رمز باید حداقل ۶ کاراکتر باشد", "error");
+    const { error } = await sb.auth.updateUser({ password: pw });
+    if (error) return toast("خطا در تغییر رمز: " + error.message, "error");
+    toast("رمز عبور تغییر کرد ✅");
+  });
+
   // پیش‌فرض بازه: ابتدای ماه شمسی جاری تا امروز (تقویم شمسی)
   const today = new Date();
   const jt = JDate.toJalaali(today.getFullYear(), today.getMonth() + 1, today.getDate());
