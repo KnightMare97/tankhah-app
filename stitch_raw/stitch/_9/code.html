@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="fa"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#dfe3e7",
+                    "secondary-container": "#fea619",
+                    "primary-fixed": "#dae2fd",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e4e9ed",
+                    "on-error-container": "#93000a",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#d6dade",
+                    "primary-container": "#131b2e",
+                    "primary": "#000000",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "tertiary": "#000000",
+                    "background": "#f6fafe",
+                    "on-primary-container": "#7c839b",
+                    "on-background": "#171c1f",
+                    "outline": "#76777d",
+                    "secondary": "#855300",
+                    "tertiary-fixed": "#d3e4fe",
+                    "surface-tint": "#565e74",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "surface-container-low": "#f0f4f8",
+                    "inverse-primary": "#bec6e0",
+                    "surface-container": "#eaeef2",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-container": "#75859d",
+                    "secondary-fixed": "#ffddb8",
+                    "on-secondary-container": "#684000",
+                    "tertiary-container": "#0b1c30",
+                    "on-surface-variant": "#45464d",
+                    "on-primary-fixed": "#131b2e",
+                    "surface-variant": "#dfe3e7",
+                    "surface-bright": "#f6fafe",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#bec6e0",
+                    "outline-variant": "#c6c6cd",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#edf1f5",
+                    "on-error": "#ffffff",
+                    "surface": "#f6fafe",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "on-secondary-fixed": "#2a1700",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "on-surface": "#171c1f",
+                    "inverse-surface": "#2c3134",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "on-primary-fixed-variant": "#3f465c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "base": "4px",
+                    "md": "16px",
+                    "xs": "8px",
+                    "xl": "32px",
+                    "sm": "12px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "40px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "data-display": ["Inter"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "headline-md": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "data-display": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f6fafe;
+            color: #171c1f;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-shadow {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+        .segmented-control {
+            background: #f0f4f8;
+            border: 1px solid #c6c6cd;
+        }
+        .segmented-item.active {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        input:focus, select:focus {
+            border-color: #fea619 !important;
+            outline: none;
+            box-shadow: 0 0 0 1px #fea619;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+<!-- Top Navigation Bar -->
+<header class="bg-background dark:bg-background border-b border-outline-variant dark:border-outline w-full top-0 sticky z-50">
+<div class="flex flex-row-reverse justify-between items-center px-margin-mobile h-14 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">account_balance_wallet</span>
+<h1 class="font-headline-sm text-headline-sm dark:text-primary-fixed">ثبت تراکنش</h1>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full">close</button>
+</div>
+</header><div class="w-full px-margin-mobile mt-4 animate-bounce">
+<div class="bg-surface-container-high border border-secondary-container rounded-lg p-3 flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-secondary-container">check_circle</span>
+<span class="font-body-md">تصویر فاکتور با موفقیت بارگذاری شد</span>
+</div>
+</div>
+<main class="w-full max-w-lg px-margin-mobile py-xl flex flex-col gap-lg pb-32">
+<!-- Transaction Type Segmented Control -->
+<div class="segmented-control p-1 rounded-xl flex flex-row-reverse w-full">
+<button class="segmented-item active flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface" id="type-expense" onclick="switchType('expense')">هزینه</button>
+<button class="segmented-item flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface-variant" id="type-income" onclick="switchType('income')">درآمد</button>
+</div>
+<!-- Amount Input Group -->
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-bold text-label-bold text-on-surface-variant px-1">مبلغ (تومان)</label>
+<div class="relative bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden custom-shadow group focus-within:ring-2 focus-within:ring-secondary-container">
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="material-symbols-outlined text-secondary-container">payments</span>
+</div>
+<input class="w-full h-20 text-center font-data-display text-data-display bg-transparent border-none focus:ring-0 text-on-surface" dir="ltr" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="۰" type="text"/>
+<div class="absolute right-0 top-0 w-1 h-full bg-secondary-container"></div>
+</div>
+</div>
+<!-- Form Fields Grid -->
+<div class="grid grid-cols-1 gap-md">
+<!-- Category Selection -->
+<div class="flex flex-col gap-xs text-right">
+<div class="flex justify-between items-center px-1 mb-1"><label class="font-label-bold text-label-bold text-on-surface-variant">ءسءه‌بنءى</label><button class="flex items-center gap-1 text-secondary text-label-bold hover:opacity-80 transition-all"><span class="material-symbols-outlined text-[16px]">add_circle</span>مءىرىء ءسءه‌بنءى‌ها</button></div>
+<div class="relative">
+<select class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 appearance-none font-body-md text-body-md text-on-surface">
+<option disabled="" selected="" value="">انتخاب کنید...</option>
+<option value="office">امور اداری</option>
+<option value="food">خوراک و رستوران</option>
+<option value="transport">حمل و نقل</option>
+<option value="utilities">قبوض و خدمات</option>
+<option value="others">سایر موارد</option>
+</select>
+<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Vendor / Description -->
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-bold text-label-bold text-on-surface-variant px-1">شرح یا فروشنده</label>
+<input class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 font-body-md text-body-md text-on-surface" placeholder="مثلاً: خرید ملزومات اداری" type="text"/>
+</div>
+<!-- Date Picker -->
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-bold text-label-bold text-on-surface-variant px-1">تاریخ تراکنش</label>
+<div class="relative">
+<input class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 font-body-md text-body-md text-on-surface text-right" type="date"/>
+<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
+</div>
+</div>
+</div>
+<!-- Receipt Upload Area -->
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-bold text-label-bold text-on-surface-variant px-1">تصویر رسید</label>
+<div class="relative border-2 border-dashed border-outline-variant rounded-xl bg-surface-container-low h-32 flex flex-col items-center justify-center cursor-pointer hover:bg-surface-container transition-colors" onclick="document.getElementById('file-upload').click()">
+<input class="hidden" id="file-upload" type="file"/>
+<span class="material-symbols-outlined text-secondary-container text-4xl mb-1">upload_file</span>
+<span class="font-body-md text-body-md text-on-surface-variant">بارگذاری تصویر یا اسکرین‌شات</span>
+</div>
+</div>
+</div>
+<!-- Save Button -->
+<button class="w-full h-14 bg-secondary-container text-on-secondary-container rounded-xl font-headline-sm text-headline-sm shadow-md active:scale-[0.98] transition-transform flex items-center justify-center gap-2 mt-4 hover:brightness-110">
+            ثبت تراکنش
+            <span class="material-symbols-outlined">check_circle</span>
+</button>
+</main>
+<!-- Bottom Navigation Bar (Hidden on this transactional page as per instructions, but placeholder for structure) -->
+<nav class="fixed bottom-0 w-full z-50 h-20 bg-surface-container-lowest border-t border-outline-variant flex flex-row-reverse justify-around items-center px-4 md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-bold text-label-bold">داشبورد</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-bold gap-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-bold text-label-bold">تراکنش‌ها</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-bold text-label-bold">بدهی‌ها</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-bold text-label-bold">تنظیمات</span>
+</a>
+</nav>
+<script>
+        function switchType(type) {
+            const expenseBtn = document.getElementById('type-expense');
+            const incomeBtn = document.getElementById('type-income');
+            
+            if (type === 'expense') {
+                expenseBtn.classList.add('active', 'text-on-surface');
+                expenseBtn.classList.remove('text-on-surface-variant');
+                incomeBtn.classList.remove('active', 'text-on-surface');
+                incomeBtn.classList.add('text-on-surface-variant');
+            } else {
+                incomeBtn.classList.add('active', 'text-on-surface');
+                incomeBtn.classList.remove('text-on-surface-variant');
+                expenseBtn.classList.remove('active', 'text-on-surface');
+                expenseBtn.classList.add('text-on-surface-variant');
+            }
+        }
+        
+        // Handle subtle interaction for inputs
+        document.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('focus', () => {
+                const parent = el.closest('.relative');
+                if (parent && parent.querySelector('.bg-secondary-container')) {
+                    // Specific logic for the amount field's side bar
+                }
+            });
+        });
+    </script>
+</body></html>

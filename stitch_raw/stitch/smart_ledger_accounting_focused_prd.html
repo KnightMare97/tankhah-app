@@ -1,0 +1,197 @@
+# Smart Ledger (Accounting Focused)
+
+## Product Overview
+
+**The Pitch:** A precision-driven mobile ledger for petty cash management. It replaces chaotic receipt drawers with an organized, auditable stream of categorized expenses and digitized invoices, ready for immediate reconciliation.
+
+**For:** Office managers, site supervisors, and accounting admins who need rigorous tracking, flawless categorization, and instant Excel reporting.
+
+**Device:** mobile
+
+**Design Direction:** Corporate, crisp, and authoritative. High-contrast deep blues, stark white backgrounds, and monospace digits emphasize accuracy, structure, and professional data entry.
+
+**Inspired by:** Ramp, Mercury
+
+---
+
+## Screens
+
+- **Dashboard:** High-level financial health, active balance, and quick-action triggers.
+- **Ledger (Transaction Log):** Chronological feed of all transactions with inline receipt thumbnails.
+- **New Entry:** Tabbed form for recording income (cash replenished) or expenses (receipts).
+- **Categorization Insights:** Visual breakdown of spending by cost centers.
+- **Export Center:** Date-range selector and one-click Excel report generation.
+
+---
+
+## Key Flows
+
+**Log New Petty Cash Expense:** User records a coffee run receipt.
+
+1. User is on Dashboard -> sees **Current Balance** and clicks floating **+ Add Entry** button.
+2. User is on New Entry -> enters `12.50`, selects **Meals & Entertainment**, captures receipt photo.
+3. User clicks **Save Transaction** -> redirected to Ledger, balance instantly deducts `$12.50`.
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#0B2840` - Headers, primary buttons, deep corporate blue
+- **Background:** `#F8FAFC` - Main app background, subtle cooling gray
+- **Surface:** `#FFFFFF` - Cards, transaction rows, input fields
+- **Text:** `#1E293B` - Body text, labels
+- **Muted:** `#94A3B8` - Subtitles, helper text, borders
+- **Accent (Expense):** `#E11D48` - Outflows, expense amounts
+- **Accent (Income):** `#059669` - Inflows, cash top-ups
+
+## Typography
+
+- **Headings:** `Plus Jakarta Sans`, 700, 20-28px
+- **Numbers/Balances:** `IBM Plex Mono`, 500, 14-36px
+- **Body:** `Inter`, 400, 15px
+- **Small text:** `Inter`, 500, 12px
+- **Buttons:** `Plus Jakarta Sans`, 600, 14px
+
+**Style notes:** Utilitarian and crisp. Minimal border radius (`4px`). 1px solid borders (`#E2E8F0`) instead of drop shadows for a flat, paper-like ledger aesthetic. Distinct separation of data rows.
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #0B2840;
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-text: #1E293B;
+  --color-muted: #94A3B8;
+  --color-expense: #E11D48;
+  --color-income: #059669;
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+  --radius: 4px;
+  --spacing: 16px;
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### Dashboard
+
+**Purpose:** Overview of current standing and monthly velocity.
+
+**Layout:** Top sticky header, primary balance card, dual-metric summary, recent activity preview.
+
+**Key Elements:**
+- **Balance Card:** `36px` monospace `$1,240.50`, deep blue background `#0B2840`, white text.
+- **Summary Metrics:** Two side-by-side white cards. Left: In (+ `$500.00` green). Right: Out (- `$342.10` red).
+- **Export Button:** Ghost button `border border-[#0B2840]`, icon (download tray), text `Export to Excel`.
+- **FAB:** Sticky bottom-right, `56x56px` circle, `#0B2840`, white `+` icon.
+
+**States:**
+- **Empty:** Balance `$0.00`, summary metrics `$0.00`, empty state graphic (clipboard).
+
+**Components:**
+- **Metric Card:** `160x80px`, `#FFFFFF`, `1px` `#E2E8F0` border.
+
+**Interactions:**
+- **Click FAB:** Slide up New Entry modal.
+- **Click Export:** Triggers native share sheet with `.xlsx` file.
+
+### Ledger (Transaction Log)
+
+**Purpose:** Auditable list of all historical entries.
+
+**Layout:** Search/filter bar at top, infinite scroll list of transactions grouped by date.
+
+**Key Elements:**
+- **Date Dividers:** `12px` uppercase muted text, `#F8FAFC` background (e.g., `OCTOBER 12, 2023`).
+- **Transaction Row:** 
+  - Left: `40x40px` invoice thumbnail (or generic category icon if no image).
+  - Middle: Merchant name `15px`, Category pill `12px`.
+  - Right: Amount in monospace, color-coded (red/green).
+- **Filter Chips:** Horizontal scrollable row: `All`, `Income`, `Expenses`, `Missing Receipts`.
+
+**States:**
+- **Loading:** Skeleton rows with shimmering thumbnails.
+
+**Interactions:**
+- **Click Row:** Opens expanded detail view.
+- **Swipe Left on Row:** Reveals quick `Edit` and `Delete` actions.
+
+### New Entry
+
+**Purpose:** Fast, structured data entry for inflows and outflows.
+
+**Layout:** Segmented control top (Income/Expense), scrollable form, fixed bottom save button.
+
+**Key Elements:**
+- **Amount Input:** Massive `48px` monospace input field, centered, auto-formats with commas.
+- **Category Select:** Bottom-sheet trigger, displays current selection (e.g., `Office Supplies`).
+- **Receipt Upload:** `100px` high dropzone/button, dashed border, camera icon.
+- **Notes Field:** Multi-line text area, `120px` height.
+- **Save Button:** Full width, bottom screen edge, `#0B2840`.
+
+**States:**
+- **Error:** Missing amount turns input border `#E11D48`, shakes on Save attempt.
+
+**Interactions:**
+- **Toggle Income/Expense:** Amount text color changes (Green/Red), category list updates.
+- **Click Receipt:** Opens native camera/gallery.
+
+### Categorization Insights
+
+**Purpose:** Visual tracking of petty cash burn rate across cost centers.
+
+**Layout:** Large chart top, sorted list of categories bottom.
+
+**Key Elements:**
+- **Bar Chart:** Horizontal stacked bar showing % of total spend per category. Colors: Blues and Grays.
+- **Category List:** Table-like rows. Rank, Name, Total Spend (monospace), % of total.
+- **Month Selector:** `< October 2023 >` header.
+
+**Components:**
+- **List Row:** `64px` height, 1px bottom border.
+
+**Interactions:**
+- **Click `< / >`:** Swipes chart left/right to previous/next month.
+
+### Export Center
+
+**Purpose:** Generating `.xlsx` reports for the accounting team.
+
+**Layout:** Simple form layout, big primary action.
+
+**Key Elements:**
+- **Date Range Picker:** Two inputs (Start Date, End Date).
+- **Format Toggle:** `.XLSX` (default) vs `.CSV`.
+- **Include Images Toggle:** Switch to zip receipt images with the spreadsheet.
+- **Generate Button:** Large `#0B2840` button, `Generate Report`.
+
+**Interactions:**
+- **Click Generate:** Button shows loading spinner, then transitions to `Share` state.
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. **Dashboard:** Establishes the core layout, typography (Plex Mono + Jakarta), and primary balance card.
+2. **Ledger:** Defines the list structures, thumbnail handling, and color-coded text for transactions.
+3. **New Entry:** Builds the form inputs, segmented controls, and fixed bottom CTAs.
+4. **Categorization Insights:** Introduces charting and tabular data layouts.
+5. **Export Center:** Reuses form elements and button styles for utility flows.
+
+</details>

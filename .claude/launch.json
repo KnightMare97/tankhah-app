@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tankhah",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8123", "--directory", "/Users/farazagency/Claude/Projects/tankhah/app"],
+      "port": 8123
+    }
+  ]
+}

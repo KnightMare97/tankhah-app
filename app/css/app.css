@@ -1,0 +1,59 @@
+/* فونت فارسی Vazirmatn (برای رندر تمیز اعداد و متن فارسی) */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+body {
+  font-family: 'Vazirmatn', 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #f6fafe;
+  color: #171c1f;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+
+/* اعداد مالی: فاصله‌ی حروف فشرده‌تر */
+.currency-font {
+  font-family: 'Inter', 'Vazirmatn', sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.custom-glass {
+  background: rgba(246, 250, 254, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.custom-shadow {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+.shadow-soft {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.segmented-control { background: #f0f4f8; border: 1px solid #c6c6cd; }
+.segmented-item.active { background: white; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+
+input:focus, select:focus {
+  border-color: #fea619 !important;
+  outline: none;
+  box-shadow: 0 0 0 1px #fea619;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* اسکلت بارگذاری (loading skeleton) */
+.skeleton {
+  background: linear-gradient(90deg, #eaeef2 25%, #f0f4f8 37%, #eaeef2 63%);
+  background-size: 400% 100%;
+  animation: skeleton 1.4s ease infinite;
+  border-radius: 0.5rem;
+}
+@keyframes skeleton { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }

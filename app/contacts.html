@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="#131b2e" name="theme-color"/>
+<title>مدیریت تنخواه | بدهی‌ها</title>
+<link rel="manifest" href="./manifest.json"/>
+<link rel="apple-touch-icon" href="./icons/icon-192.png"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="./js/theme.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="./css/app.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./config.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- Top AppBar -->
+<header class="w-full top-0 sticky z-50 custom-glass border-b border-outline-variant">
+<div class="flex flex-row-reverse justify-between items-center px-margin-mobile h-14 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">person_search</span>
+<h1 class="font-headline-sm text-headline-sm text-primary">بدهی‌ها و همکاران</h1>
+</div>
+<button id="add-contact-btn" class="p-2 hover:bg-surface-container-low transition-colors rounded-full active:opacity-80">
+<span class="material-symbols-outlined">person_add</span>
+</button>
+</div>
+</header>
+<main class="px-4 mt-6 max-w-md mx-auto">
+<!-- Total Debt Card -->
+<div class="relative overflow-hidden rounded-xl bg-primary-container text-on-primary-fixed mb-lg p-lg shadow-sm border border-outline-variant">
+<div class="flex justify-between items-center mb-base">
+<span class="font-label-bold text-label-bold text-on-primary-container">مجموع طلب همکاران</span>
+<span class="material-symbols-outlined text-secondary-container">request_quote</span>
+</div>
+<div class="flex items-baseline gap-2 mt-xs">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-white currency-font" id="total-debt">—</h1>
+<span class="text-body-md font-body-md text-on-primary-container opacity-80">تومان</span>
+</div>
+</div>
+<!-- Contacts List -->
+<div class="flex justify-between items-center mb-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">لیست همکاران</h2>
+</div>
+<div class="space-y-3" id="contacts-list">
+<div class="skeleton h-20 rounded-lg"></div>
+<div class="skeleton h-20 rounded-lg"></div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full z-50 h-20 bg-surface-container-lowest border-t border-outline-variant shadow-sm">
+<div class="flex flex-row-reverse justify-around items-center w-full px-4 h-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="./index.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-bold text-label-bold">داشبورد</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="./transactions.html">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-bold text-label-bold">تراکنش‌ها</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-bold gap-1 active:scale-95 duration-100" href="./contacts.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person_search</span>
+<span class="font-label-bold text-label-bold">بدهی‌ها</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="./settings.html">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-bold text-label-bold">تنظیمات</span>
+</a>
+</div>
+</nav>
+<script src="./js/common.js"></script>
+<script src="./js/supabase.js"></script>
+<script src="./js/contacts.js"></script>
+</body>
+</html>

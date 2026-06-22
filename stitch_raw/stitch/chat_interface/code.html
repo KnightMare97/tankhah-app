@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Petty Cash - Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#f2cc0d",
+            "background-light": "#f8f8f5",
+            "background-dark": "#221f10",
+            "text-dark": "#09090b",
+            "surface-gray": "#f4f4f5",
+          },
+          fontFamily: {
+            "display": ["Nunito Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "1.5rem",
+            "xl": "2rem",
+            "full": "9999px"
+          },
+          borderWidth: {
+            'thick': '2px',
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background-color: #ffffff;
+      color: #09090b;
+      overscroll-behavior-y: none; /* Prevent pull-to-refresh on mobile */
+    }
+    
+    .border-thick {
+      border: 2px solid #09090b;
+    }
+
+    /* Hide scrollbar for quick actions */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+
+    .bubble-assistant {
+      border-bottom-left-radius: 4px !important;
+    }
+
+    .bubble-user {
+      border-bottom-right-radius: 4px !important;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col h-screen w-full overflow-hidden bg-white selection:bg-primary selection:text-text-dark">
+<!-- Header (From Shared Components - TopAppBar modified for styling) -->
+<header class="sticky top-0 z-50 flex items-center justify-center bg-white p-4 h-[64px] border-b-thick shrink-0">
+<h1 class="text-text-dark text-xl font-bold tracking-tight">Vault: $1,240.50</h1>
+</header>
+<!-- Chat Feed -->
+<main class="flex-1 overflow-y-auto p-4 space-y-6 flex flex-col no-scrollbar pb-[140px]" id="chat-feed">
+<!-- Date Divider -->
+<div class="flex justify-center w-full mt-2">
+<span class="text-xs font-semibold text-gray-500 bg-surface-gray px-3 py-1 rounded-full border-thick">Today</span>
+</div>
+<!-- Assistant Message (From Shared Components snippet) -->
+<div class="flex items-end gap-3 max-w-[85%] self-start">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 shrink-0 border-thick" data-alt="A small 80x80 circular avatar placeholder for an AI assistant, light background with a subtle minimalist geometric logo, stark comic-book style ink lines." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCJvE4LUaUML3R0ZH9WTZRq1bnWP8VFU1BR_PgTizr3C4oss6M0i1OQxggRNzxEEO_JrqAH46lkxdjiWroELyx66-nsJyGrXx8w15LTm9xPRzlqg3kYRtL7PDzE2Iytwj_3ZKB2TdpLgauRt64gv-m4l27Lv17HwGLk2exdHW3lzq-3cByC8cLPBe1a5Q9e8W22p5OtnOpMwQGVq19An6hz8GbOpBUKT9gGvvfH46zin0EURoRh3wAhTaZJ0wqfkgMA4tSehC-L-NsO');"></div>
+<div class="flex flex-col items-start gap-1">
+<span class="text-xs font-bold text-gray-500 ml-1">Assistant</span>
+<div class="bg-surface-gray text-text-dark text-base font-semibold leading-snug p-4 rounded-xl bubble-assistant border-thick shadow-[2px_2px_0px_0px_#09090b]">
+          Hey! Let's track some cash. Tap the camera to scan a receipt, or tell me what you spent.
+        </div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end gap-1 max-w-[85%] self-end">
+<div class="bg-primary text-text-dark text-base font-bold leading-snug p-4 rounded-xl bubble-user border-thick shadow-[2px_2px_0px_0px_#09090b]">
+        Gave Sarah $50 for lunch
+      </div>
+</div>
+<!-- Assistant Response (IOU Card Concept) -->
+<div class="flex items-end gap-3 max-w-[85%] self-start mt-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 shrink-0 border-thick" data-alt="A small 80x80 circular avatar placeholder for an AI assistant, light background with a subtle minimalist geometric logo, stark comic-book style ink lines." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDyQh-MsMAObG_BqSAT51PPB2tUwWNgZlzR6KyV44d7BOAEhRCLg2S67JA4dEyHZc_VXtralxXy9ciG9Ay82J2lY_Ud0osEbp6uLwSKrFmMBAnz9nW1giF8hfnzIVvWThzmak032oEHX0G5fwg-cTtbCvNEp-VVRP6dep_a-CPs5OpBIss_YDtyjrbqdvd4ZBKvwf7zwtlke5Eed8uTYnUP3TF6q_HJuevokwKUL9w-7b84NJZn3T2ySXZmyNNHBtPpx4MN6Pi27eqg');"></div>
+<div class="flex flex-col items-start gap-1 w-full">
+<span class="text-xs font-bold text-gray-500 ml-1">Assistant</span>
+<!-- Embedded Interactive Card within Chat -->
+<div class="bg-white border-thick rounded-xl p-4 w-full bubble-assistant shadow-[2px_2px_0px_0px_#09090b]">
+<div class="flex items-center gap-2 mb-2 text-red-500">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-bold text-sm tracking-wide uppercase">IOU Detected</span>
+</div>
+<p class="text-text-dark font-semibold text-lg mb-4">You loaned $50.00 to Sarah.</p>
+<button class="w-full bg-primary hover:bg-yellow-400 active:bg-yellow-500 text-text-dark font-bold py-3 px-4 rounded-full border-thick transition-colors shadow-[2px_2px_0px_0px_#09090b]">
+            Confirm IOU
+          </button>
+</div>
+</div>
+</div>
+<!-- Spacer for scrolling -->
+<div class="h-4"></div>
+</main>
+<!-- Fixed Bottom Input Area -->
+<div class="fixed bottom-0 left-0 w-full bg-white bg-opacity-95 backdrop-blur-sm border-t-thick p-3 pb-safe pt-2 flex flex-col gap-3 z-50">
+<!-- Quick Actions Row -->
+<div class="flex overflow-x-auto gap-2 no-scrollbar px-1 py-1">
+<button class="whitespace-nowrap bg-surface-gray hover:bg-gray-200 text-text-dark text-sm font-bold py-2 px-4 rounded-full border-thick shadow-[1px_1px_0px_0px_#09090b] transition-transform active:translate-y-[1px] active:shadow-none">
+        Add Funds
+      </button>
+<button class="whitespace-nowrap bg-surface-gray hover:bg-gray-200 text-text-dark text-sm font-bold py-2 px-4 rounded-full border-thick shadow-[1px_1px_0px_0px_#09090b] transition-transform active:translate-y-[1px] active:shadow-none">
+        Who owes me?
+      </button>
+<button class="whitespace-nowrap bg-surface-gray hover:bg-gray-200 text-text-dark text-sm font-bold py-2 px-4 rounded-full border-thick shadow-[1px_1px_0px_0px_#09090b] transition-transform active:translate-y-[1px] active:shadow-none">
+        Export
+      </button>
+<button class="whitespace-nowrap bg-surface-gray hover:bg-gray-200 text-text-dark text-sm font-bold py-2 px-4 rounded-full border-thick shadow-[1px_1px_0px_0px_#09090b] transition-transform active:translate-y-[1px] active:shadow-none">
+        Latest Expenses
+      </button>
+</div>
+<!-- Main Input Pill -->
+<div class="flex items-center gap-2 bg-surface-gray border-thick rounded-full p-1 shadow-[2px_2px_0px_0px_#09090b] focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 transition-all">
+<!-- Camera Button -->
+<button aria-label="Scan Receipt" class="flex items-center justify-center w-12 h-12 rounded-full bg-white border-thick hover:bg-gray-100 transition-colors shrink-0">
+<span class="material-symbols-outlined text-text-dark">photo_camera</span>
+</button>
+<!-- Text Input -->
+<input class="flex-1 bg-transparent border-none text-text-dark font-semibold text-base placeholder-gray-500 focus:ring-0 px-2 h-12" placeholder="Type an expense..." type="text"/>
+<!-- Send Button -->
+<button aria-label="Send Message" class="flex items-center justify-center w-12 h-12 rounded-full bg-primary border-thick hover:bg-yellow-400 active:bg-yellow-500 transition-colors shrink-0">
+<span class="material-symbols-outlined text-text-dark font-bold" style="font-variation-settings: 'FILL' 1;">arrow_upward</span>
+</button>
+</div>
+</div>
+<script>
+    // Simple script to auto-scroll to bottom on load
+    document.addEventListener("DOMContentLoaded", () => {
+      const feed = document.getElementById('chat-feed');
+      feed.scrollTop = feed.scrollHeight;
+      
+      // Optional: Handle visual keyboard dismissal by swiping down (conceptual)
+      let touchstartY = 0;
+      let touchendY = 0;
+      
+      feed.addEventListener('touchstart', e => {
+        touchstartY = e.changedTouches[0].screenY;
+      }, {passive: true});
+      
+      feed.addEventListener('touchend', e => {
+        touchendY = e.changedTouches[0].screenY;
+        if (touchendY - touchstartY > 50) {
+          // Swipe down detected, blur inputs
+          document.activeElement.blur();
+        }
+      }, {passive: true});
+    });
+  </script>
+</body></html>

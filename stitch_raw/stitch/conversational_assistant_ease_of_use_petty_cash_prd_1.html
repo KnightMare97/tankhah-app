@@ -1,0 +1,185 @@
+# Conversational Assistant (Ease of Use) - Petty Cash
+
+## Product Overview
+
+**The Pitch:** A chat-based petty cash manager that turns scattered receipts and random text messages into perfectly formatted spreadsheets. Snap a photo or text the AI assistant, and it instantly logs the expense, tracks IOUs, and balances the till. 
+
+**For:** Office managers, production assistants, and event coordinators who hate spreadsheets but love texting.
+
+**Device:** mobile
+
+**Design Direction:** Playful, tactile, and bubbly. Warm off-white canvas with unapologetic, chunky yellow accents and pill-shaped UI elements.
+
+**Inspired by:** Cleo, Duolingo, Apple Messages
+
+---
+
+## Screens
+
+- **[Assistant Chat]:** Main conversational interface for inputting expenses, uploading receipts, and chatting with the AI.
+- **[Transaction Ledger]:** Searchable, organized list of all parsed income and expenses.
+- **[IOU Dashboard]:** Track pending debts, requested cash, and settled balances.
+- **[Export & Settings]:** Simple one-tap CSV/Excel export and balance overview.
+
+---
+
+## Key Flows
+
+**Logging a physical receipt:**
+
+1. User is on [Assistant Chat] -> sees empty chat timeline and bottom input bar.
+2. User taps [Camera Icon] -> opens native camera, user snaps receipt.
+3. Chat shows uploading bubble -> AI replies with a parsed receipt card (Amount, Vendor, Date).
+4. User taps [Confirm Button] -> data is saved to Ledger.
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#FFD23F` - Main buttons, chat bubbles from user, floating action buttons
+- **Background:** `#FCFBF7` - App background, chat canvas
+- **Surface:** `#FFFFFF` - AI chat bubbles, receipt cards, ledger items
+- **Text:** `#2B2B28` - Primary typography, amounts
+- **Muted:** `#979692` - Timestamps, secondary text, borders
+- **Accent:** `#EE6352` - Debt/Owed amounts, delete actions
+- **Success:** `#59C9A5` - Income, settled IOUs
+
+## Typography
+
+Distinctive, friendly, and highly legible.
+
+- **Headings:** `Fraunces`, 700, 28px
+- **Body:** `DM Sans`, 500, 16px
+- **Small text:** `DM Sans`, 400, 13px
+- **Buttons:** `DM Sans`, 700, 15px
+
+**Style notes:** Extremely bubbly. Heavy use of pill shapes (`9999px` radius). AI bubbles have a distinct tail. Soft, deep shadows on primary yellow elements to make them feel pressable.
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #FFD23F;
+  --color-background: #FCFBF7;
+  --color-surface: #FFFFFF;
+  --color-text: #2B2B28;
+  --color-muted: #979692;
+  --color-accent: #EE6352;
+  --color-success: #59C9A5;
+  
+  --font-heading: 'Fraunces', serif;
+  --font-body: 'DM Sans', sans-serif;
+  
+  --radius-pill: 9999px;
+  --radius-card: 24px;
+  --radius-bubble: 20px;
+  
+  --shadow-bubbly: 0 8px 16px rgba(255, 210, 63, 0.25);
+  --shadow-card: 0 4px 12px rgba(43, 43, 40, 0.05);
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### Assistant Chat
+
+**Purpose:** Primary input method. Feels like texting a smart accountant.
+
+**Layout:** Standard chat UI. Sticky top header (current balance), scrollable message list, sticky bottom input area.
+
+**Key Elements:**
+- **Header:** 72px height, center-aligned `$452.10` in `Fraunces`, subtitle "Current Balance".
+- **Chat Canvas:** Alternating messages. User messages are right-aligned (Yellow). AI messages are left-aligned (White).
+- **Input Bar:** Pill-shaped text input (`#FFFFFF`), camera icon (left), send arrow icon (right).
+- **Action Chips:** Horizontal scrolling pills above input ("Log Income", "Who owes me?", "Export").
+
+**States:**
+- **Empty:** AI greeting bubble: "Hey! Drop a receipt, screenshot, or just tell me what you bought."
+- **Loading:** 3 bouncing dots inside a white chat bubble.
+- **Error:** Red exclamation icon next to failed message, "Tap to retry".
+
+**Components:**
+- **Parsed Expense Card:** Sent by AI. White surface, 24px radius, contains vendor name, bold amount (`$12.50`), category dropdown, and a primary "Looks Good" button.
+
+**Interactions:**
+- **Click [Camera]:** Expands bottom sheet to choose "Camera" or "Photo Library".
+- **Hover/Tap [Looks Good]:** Button presses down (scale 0.95), confetti pop animation, card collapses into a generic "Saved" text bubble.
+
+### Transaction Ledger
+
+**Purpose:** Historical view of all parsed data.
+
+**Layout:** Chronological list. Sticky month headers.
+
+**Key Elements:**
+- **Filter Bar:** Top tabs for "All", "Expenses", "Income". Pill shape, active state is Yellow.
+- **List Item:** 72px height. Icon placeholder left, Vendor/Name middle, Amount right. Red for expense (`-$12.00`), Green for income (`+$100.00`).
+- **Export FAB:** Floating button bottom right. Circle 64px, Yellow, download icon.
+
+**States:**
+- **Empty:** Illustration of an empty wallet, "No transactions yet. Tell the Assistant to log something!"
+
+**Components:**
+- **Date Header:** `#FCFBF7` background, 14px uppercase text, `#979692` color.
+
+**Interactions:**
+- **Click [List Item]:** Opens bottom sheet with full transaction details and original receipt image.
+
+### IOU Dashboard
+
+**Purpose:** Tracking who owes petty cash, or who was fronted money.
+
+**Layout:** Grid of cards for individuals, followed by a list of resolved IOUs.
+
+**Key Elements:**
+- **Outstanding Card:** 160x160px card, white background, `24px` radius. Large center text for person's name, bold red amount below (`-$45.00`). "Remind" button.
+- **Resolved List:** Simple row list at bottom. Green amounts.
+
+**States:**
+- **Empty:** "Nobody owes you money! You're a saint."
+
+**Components:**
+- **Remind Button:** Outline button, 2px `#2B2B28` border, pill shape. Opens default SMS app with pre-filled text.
+
+**Interactions:**
+- **Click [Card]:** Flips card to show specific transaction history for that person.
+
+### Export & Settings
+
+**Purpose:** Get data out of the app cleanly.
+
+**Layout:** Simple list of settings and a large hero export section.
+
+**Key Elements:**
+- **Date Picker:** "Start Date" to "End Date" selection using native iOS/Android pickers.
+- **Export Button:** Massive 56px height, full-width Yellow button, `Fraunces` bold text "Generate Excel Magic".
+- **Fund Input:** Text input to set total monthly petty cash limit.
+
+**States:**
+- **Loading:** Export button replaces text with a spinning loader.
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. **Assistant Chat** - Establishes the core UI, complex chat layout, input mechanics, and bubbly design tokens.
+2. **Parsed Expense Component** - The critical piece of UI that users interact with most.
+3. **Transaction Ledger** - Reuses the typography and spacing rules established in chat.
+4. **IOU Dashboard** - Introduces the grid layout and card variants.
+5. **Export & Settings** - Simple forms and full-width buttons.
+
+</details>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="fa"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#855300",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "on-primary-container": "#7c839b",
+                    "outline-variant": "#c6c6cd",
+                    "primary": "#000000",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d6dade",
+                    "primary-fixed": "#dae2fd",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "tertiary-fixed": "#d3e4fe",
+                    "surface-container-high": "#e4e9ed",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "secondary-fixed": "#ffddb8",
+                    "primary-container": "#131b2e",
+                    "surface-container-low": "#f0f4f8",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#dfe3e7",
+                    "surface-bright": "#f6fafe",
+                    "inverse-surface": "#2c3134",
+                    "tertiary-container": "#0b1c30",
+                    "surface-container": "#eaeef2",
+                    "on-surface-variant": "#45464d",
+                    "on-primary-fixed": "#131b2e",
+                    "inverse-on-surface": "#edf1f5",
+                    "surface": "#f6fafe",
+                    "on-secondary-container": "#684000",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "surface-container-highest": "#dfe3e7",
+                    "error": "#ba1a1a",
+                    "tertiary": "#000000",
+                    "surface-tint": "#565e74",
+                    "on-tertiary-container": "#75859d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#171c1f",
+                    "on-surface": "#171c1f",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "secondary-container": "#fea619",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "outline": "#76777d",
+                    "inverse-primary": "#bec6e0",
+                    "on-secondary-fixed": "#2a1700",
+                    "background": "#f6fafe"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "base": "4px",
+                    "lg": "24px",
+                    "xs": "8px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "sm": "12px",
+                    "margin-desktop": "40px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Inter"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "data-display": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "data-display": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f6fafe; }
+        .persian-num { font-feature-settings: "ss01"; }
+        .custom-chart-bar { transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .donut-segment {
+            transition: stroke-dasharray 1s ease-out;
+        }
+    </style>
+<style>
+        body {
+          min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-background border-b border-outline-variant z-50">
+<div class="flex flex-row-reverse justify-between items-center px-margin-mobile h-14 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance_wallet">account_balance_wallet</span>
+<h1 class="font-headline-md text-headline-md font-bold text-secondary">مدیریت تنخواه</h1>
+</div>
+<button class="hover:bg-surface-container-low transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="px-margin-mobile mt-lg max-w-2xl mx-auto">
+<!-- Monthly Selector -->
+<div class="flex items-center justify-between mb-lg bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-sm">
+<button class="flex items-center justify-center w-10 h-10 hover:bg-surface-container-low rounded-full transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="font-label-bold text-label-bold text-on-surface-variant">دوره گزارش‌دهی</span>
+<span class="font-headline-sm text-headline-sm text-primary">اردیبهشت ۱۴۰۳</span>
+</div>
+<button class="flex items-center justify-center w-10 h-10 hover:bg-surface-container-low rounded-full transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+</div>
+<!-- Summary Card (Bento Style) -->
+<div class="grid grid-cols-2 gap-md mb-lg">
+<div class="bg-primary-container text-on-primary-container p-md rounded-xl border border-primary flex flex-col justify-between">
+<span class="font-label-bold text-label-bold opacity-80">کل مخارج</span>
+<div class="mt-xs">
+<span class="font-data-display text-data-display text-white">۱۲,۴۵۰,۰۰۰</span>
+<span class="text-[10px] font-bold">ریال</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant flex flex-col justify-between">
+<span class="font-label-bold text-label-bold text-on-surface-variant">مانده فعلی</span>
+<div class="mt-xs">
+<span class="font-data-display text-data-display text-secondary">۲,۵۵۰,۰۰۰</span>
+<span class="text-[10px] font-bold text-secondary">ریال</span>
+</div>
+</div>
+</div>
+<!-- Reports Section with Donut Chart -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg mb-lg shadow-sm">
+<div class="flex items-center justify-between mb-lg">
+<h2 class="font-headline-sm text-headline-sm text-primary">تحلیل دسته‌بندی</h2>
+<span class="material-symbols-outlined text-secondary" data-icon="insights">insights</span>
+</div>
+<!-- Donut Chart Container -->
+<div class="flex flex-col items-center justify-center mb-xl">
+<div class="relative w-48 h-48">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 42 42">
+<!-- Background circle -->
+<circle class="donut-hole" cx="21" cy="21" fill="transparent" r="15.91549430918954"></circle>
+<circle class="donut-ring" cx="21" cy="21" fill="transparent" r="15.91549430918954" stroke="currentColor" stroke-width="5"></circle>
+<!-- Segments -->
+<!-- Amber (Snapp) 45% -->
+<circle class="donut-segment text-secondary-container" cx="21" cy="21" fill="transparent" r="15.91549430918954" stroke="currentColor" stroke-dasharray="45 55" stroke-dashoffset="0" stroke-width="5"></circle>
+<!-- Navy (Office) 28% (offset by 45) -->
+<circle class="donut-segment text-primary" cx="21" cy="21" fill="transparent" r="15.91549430918954" stroke="currentColor" stroke-dasharray="28 72" stroke-dashoffset="-45" stroke-width="5"></circle>
+<!-- Navy Variant (Maintenance) 17% (offset by 45+28=73) -->
+<circle class="donut-segment text-on-tertiary-container" cx="21" cy="21" fill="transparent" r="15.91549430918954" stroke="currentColor" stroke-dasharray="17 83" stroke-dashoffset="-73" stroke-width="5"></circle>
+<!-- Gray (Misc) 10% (offset by 45+28+17=90) -->
+<circle class="donut-segment text-outline" cx="21" cy="21" fill="transparent" r="15.91549430918954" stroke="currentColor" stroke-dasharray="10 90" stroke-dashoffset="-90" stroke-width="5"></circle>
+</svg>
+<!-- Center Text -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-label-bold text-[10px] text-on-surface-variant">کل گزارش</span>
+<span class="font-headline-sm text-headline-sm leading-tight">۱۰۰٪</span>
+</div>
+</div>
+</div>
+<!-- Horizontal Bars for Detailed Distribution -->
+<div class="space-y-lg">
+<!-- Snapp -->
+<div class="space-y-xs">
+<div class="flex justify-between items-end">
+<span class="font-body-md text-body-md font-bold">اسنپ و حمل‌ونقل</span>
+<span class="font-label-bold text-label-bold text-on-surface-variant">۴۵٪</span>
+</div>
+<div class="w-full bg-surface-container h-3 rounded-full overflow-hidden">
+<div class="custom-chart-bar h-full bg-secondary-container" style="width: 45%"></div>
+</div>
+</div>
+<!-- Office Supplies -->
+<div class="space-y-xs">
+<div class="flex justify-between items-end">
+<span class="font-body-md text-body-md font-bold">ملزومات اداری</span>
+<span class="font-label-bold text-label-bold text-on-surface-variant">۲۸٪</span>
+</div>
+<div class="w-full bg-surface-container h-3 rounded-full overflow-hidden">
+<div class="custom-chart-bar h-full bg-primary" style="width: 28%"></div>
+</div>
+</div>
+<!-- Maintenance -->
+<div class="space-y-xs">
+<div class="flex justify-between items-end">
+<span class="font-body-md text-body-md font-bold">تعمیرات و نگهداری</span>
+<span class="font-label-bold text-label-bold text-on-surface-variant">۱۷٪</span>
+</div>
+<div class="w-full bg-surface-container h-3 rounded-full overflow-hidden">
+<div class="custom-chart-bar h-full bg-on-tertiary-container" style="width: 17%"></div>
+</div>
+</div>
+<!-- Miscellaneous -->
+<div class="space-y-xs">
+<div class="flex justify-between items-end">
+<span class="font-body-md text-body-md font-bold">متفرقه</span>
+<span class="font-label-bold text-label-bold text-on-surface-variant">۱۰٪</span>
+</div>
+<div class="w-full bg-surface-container h-3 rounded-full overflow-hidden">
+<div class="custom-chart-bar h-full bg-outline" style="width: 10%"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Detail List -->
+<section class="space-y-md">
+<h3 class="font-label-bold text-label-bold text-on-surface-variant px-base">جزئیات هزینه‌ها</h3>
+<!-- Snapp Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-center gap-md relative overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-secondary-container"></div>
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="directions_car">directions_car</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-lg text-body-lg font-bold">اسنپ</h4>
+<p class="font-label-bold text-label-bold text-on-surface-variant">۱۲ تراکنش</p>
+</div>
+<div class="text-left">
+<p class="font-headline-sm text-headline-sm">۵,۶۰۰,۰۰۰</p>
+<p class="text-[10px] font-bold text-on-surface-variant">ریال</p>
+</div>
+</div>
+<!-- Office Supplies Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-center gap-md relative overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-fixed-variant" data-icon="description">description</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-lg text-body-lg font-bold">ملزومات اداری</h4>
+<p class="font-label-bold text-label-bold text-on-surface-variant">۸ تراکنش</p>
+</div>
+<div class="text-left">
+<p class="font-headline-sm text-headline-sm">۳,۴۸۰,۰۰۰</p>
+<p class="text-[10px] font-bold text-on-surface-variant">ریال</p>
+</div>
+</div>
+<!-- Maintenance Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-center gap-md relative overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-on-tertiary-container"></div>
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant" data-icon="build">build</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-lg text-body-lg font-bold">تعمیرات</h4>
+<p class="font-label-bold text-label-bold text-on-surface-variant">۳ تراکنش</p>
+</div>
+<div class="text-left">
+<p class="font-headline-sm text-headline-sm">۲,۱۲۰,۰۰۰</p>
+<p class="text-[10px] font-bold text-on-surface-variant">ریال</p>
+</div>
+</div>
+<!-- Miscellaneous Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-center gap-md relative overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-outline"></div>
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="more_horiz">more_horiz</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-lg text-body-lg font-bold">متفرقه</h4>
+<p class="font-label-bold text-label-bold text-on-surface-variant">۵ تراکنش</p>
+</div>
+<div class="text-left">
+<p class="font-headline-sm text-headline-sm">۱,۲۵۰,۰۰۰</p>
+<p class="text-[10px] font-bold text-on-surface-variant">ریال</p>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB for adding expense -->
+<button class="fixed bottom-24 left-6 w-14 h-14 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform z-40 border-4 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[32px]" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 h-20 bg-surface-container-lowest border-t border-outline-variant shadow-sm md:hidden">
+<div class="flex flex-row-reverse justify-around items-center w-full px-4 h-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-bold text-label-bold">داشبورد</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-bold gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long" data-weight="fill">receipt_long</span>
+<span class="font-label-bold text-label-bold">تراکنش‌ها</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-label-bold text-label-bold">بدهی‌ها</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-bold text-label-bold">تنظیمات</span>
+</a>
+</div>
+</nav>
+<script>
+        // Simple animation trigger for chart bars and donut segments
+        window.addEventListener('load', () => {
+            // Animate progress bars
+            const bars = document.querySelectorAll('.custom-chart-bar');
+            bars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 300);
+            });
+
+            // Animate donut segments
+            const segments = document.querySelectorAll('.donut-segment');
+            segments.forEach(segment => {
+                const dasharray = segment.getAttribute('stroke-dasharray');
+                segment.setAttribute('stroke-dasharray', `0 100`);
+                setTimeout(() => {
+                    segment.setAttribute('stroke-dasharray', dasharray);
+                }, 400);
+            });
+        });
+    </script>
+</body></html>

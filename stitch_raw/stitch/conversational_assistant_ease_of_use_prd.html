@@ -1,0 +1,192 @@
+# Conversational Assistant (Ease of Use)
+
+## Product Overview
+
+**The Pitch:** A delightfully simple petty cash tracker that feels like texting a hyper-organized friend. Snap a receipt, drop it in the chat, and let the AI instantly parse the details and log your expenses or debts without tedious forms.
+
+**For:** Freelancers, roommates, and small business owners who hate manual data entry and want an effortless, conversational way to track who spent what.
+
+**Device:** mobile
+
+**Design Direction:** Playful, tactile, and bubbly. High-contrast vibrant accents against warm, paper-like backgrounds with soft organic curves. 
+
+**Inspired by:** Cleo, Duolingo
+
+---
+
+## Screens
+
+- **Chat Interface:** The core screen for uploading receipts and confirming AI-parsed expenses.
+- **Inbox / History:** A chronological list of past expense threads and recorded transactions.
+- **Debt Dashboard:** A clear, visual summary of money owed to or by others.
+- **Expense Detail:** A quick edit screen to manually tweak AI-parsed data before saving.
+
+---
+
+## Key Flows
+
+**Logging a new expense:** User wants to record a receipt without typing.
+
+1. User is on Chat Interface -> sees an empty input bar with a camera icon
+2. User clicks Camera icon -> snaps a photo of a $50 Snapp receipt
+3. AI responds with a bubble: "I've detected a $50 expense from Snapp on June 10th. Should I record this?" with "Yes" and "Edit" quick replies.
+4. User taps "Yes" -> Expense is saved, AI confirms with a success animation.
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#FFD700` - User chat bubbles, primary FABs, active tabs
+- **Background:** `#FBF9F6` - App background, warm off-white
+- **Surface:** `#FFFFFF` - AI chat bubbles, cards, bottom navigation
+- **Text:** `#1A1A24` - Deep ink for maximum readability and contrast
+- **Muted:** `#8C8C9A` - Timestamps, placeholder text, inactive icons
+- **Accent:** `#FF715B` - Coral red for negative balances/debts, delete actions
+
+## Typography
+
+Choose fonts that are **distinctive and characterful**, avoiding generic defaults.
+
+- **Headings:** Recoleta, 700, 24-32px
+- **Body:** DM Sans, 500, 16px
+- **Small text:** DM Sans, 400, 13px
+- **Buttons:** DM Sans, 700, 15px
+
+**Style notes:** Fully rounded corners on buttons (`999px`), asymmetric border radii on chat bubbles (e.g., `20px 20px 4px 20px`), subtle drop shadows (`0 4px 12px rgba(26, 26, 36, 0.08)`) to lift surfaces off the warm background.
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #FFD700;
+  --color-background: #FBF9F6;
+  --color-surface: #FFFFFF;
+  --color-text: #1A1A24;
+  --color-muted: #8C8C9A;
+  --color-accent: #FF715B;
+  --font-heading: 'Recoleta', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --radius-bubble: 20px;
+  --radius-button: 99px;
+  --shadow-soft: 0 4px 12px rgba(26, 26, 36, 0.08);
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### Chat Interface
+
+**Purpose:** Main interaction hub for submitting receipts and confirming data.
+
+**Layout:** Standard chat layout. Top header with current balance. Scrollable middle chat area. Bottom sticky input bar.
+
+**Key Elements:**
+- **Header:** Centered Recoleta text "Penny", right-aligned quick balance `$142.50` in a pill.
+- **AI Bubble:** `#FFFFFF` background, deep ink text, asymmetric radius (bottom-left 4px).
+- **User Bubble:** `#FFD700` background, deep ink text, asymmetric radius (bottom-right 4px). Contains thumbnail of uploaded image.
+- **Input Bar:** Fixed bottom, pill-shaped input field, large camera FAB inside the bar.
+- **Quick Replies:** Pill buttons (`#FFFFFF` with `#1A1A24` border) appearing below AI questions ("Yes, record it", "No, edit").
+
+**States:**
+- **Empty:** Playful illustration of an empty wallet, "Snap a receipt to get started!"
+- **Loading:** Three bouncing dots in an AI bubble.
+- **Error:** AI bubble with coral red border: "Oops, I couldn't read that one. Try again?"
+
+**Components:**
+- **Quick Reply Pill:** `auto` width, 40px height, 1px solid deep ink, text 14px bold.
+
+**Interactions:**
+- **Click Camera:** Opens native device camera/gallery.
+- **Click Quick Reply:** Bubble animates up, AI responds instantly.
+
+**Responsive:**
+- **Mobile:** Full width, sticky bottom input.
+
+### Inbox / History
+
+**Purpose:** Review past interactions and finalized expenses.
+
+**Layout:** List view of past days, grouped by date.
+
+**Key Elements:**
+- **Date Headers:** 14px DM Sans bold, muted text, sticky on scroll.
+- **Transaction Row:** Left: Merchant logo/icon in a yellow circle. Middle: Merchant name, category. Right: Amount in deep ink.
+- **Search Bar:** Pill-shaped, muted gray background, magnifying glass icon.
+
+**States:**
+- **Empty:** "No history yet."
+
+**Interactions:**
+- **Click Row:** Opens Expense Detail modal.
+- **Swipe Left on Row:** Reveals Coral Red "Delete" action.
+
+**Responsive:**
+- **Mobile:** 100vw, list layout.
+
+### Debt Dashboard
+
+**Purpose:** Track money owed to or by others.
+
+**Layout:** Top summary cards (Owed to me, I owe), followed by a list of people.
+
+**Key Elements:**
+- **Summary Cards:** Two side-by-side cards. Left: "You are owed" (`#FFFFFF`, Deep Ink text). Right: "You owe" (`#FFFFFF`, Coral Red text).
+- **Person Row:** Avatar (initials or photo), Name, Net balance. 
+- **"Settle Up" Button:** Small primary pill button inside the row if balance != 0.
+
+**States:**
+- **Empty:** "You're all squared up!"
+
+**Interactions:**
+- **Click Person Row:** Opens detailed history with that person.
+- **Click Settle Up:** Confirms payment, animates confetti, sets balance to $0.
+
+**Responsive:**
+- **Mobile:** 2-column grid for summary cards, 1-column list for people.
+
+### Expense Detail
+
+**Purpose:** Manually edit AI-parsed data or review a past transaction.
+
+**Layout:** Bottom sheet modal over the Chat interface.
+
+**Key Elements:**
+- **Receipt Preview:** Top half, zoomable thumbnail.
+- **Form Fields:** Large, borderless text inputs with muted labels ("Merchant", "Date", "Amount", "Split with").
+- **Save Button:** Full-width primary button at the bottom.
+
+**States:**
+- **Loading:** Skeleton loaders for form fields while image is processed.
+
+**Interactions:**
+- **Drag down:** Dismisses the bottom sheet.
+- **Click Save:** Bottom sheet slides down, returns to chat with a confirmation bubble.
+
+**Responsive:**
+- **Mobile:** Fixed bottom sheet, max height 85vh.
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. Chat Interface - Establishes the core bubble components, typography, and color palette.
+2. Bottom Navigation & Header - Anchors the layout.
+3. Debt Dashboard - Introduces layout grids and card components.
+4. Inbox / History - Reuses typography and list components.
+5. Expense Detail Modal - Adds the overlay and form interaction patterns.
+
+</details>

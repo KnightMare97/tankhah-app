@@ -1,0 +1,190 @@
+# Conversational Assistant (Ease of Use) - Petty Cash
+
+## Product Overview
+
+**The Pitch:** A chat-based petty cash manager that turns uploading receipts and logging IOUs into a simple conversation. Snap a photo, let AI extract the details, confirm the amounts, and automatically track your balance without navigating complex forms.
+
+**For:** Office managers, personal assistants, and team leads who need to process small expenses on the go and hate manual data entry.
+
+**Device:** mobile
+
+**Design Direction:** Warm, friendly, and "bubbly" aesthetic using a stark high-contrast palette of vibrant yellow, crisp white, and deep black. Thick strokes, oversized border radii, and playful typography make financial tracking feel less like accounting and more like texting a helpful friend.
+
+**Inspired by:** Cleo, Snapchat, Duolingo
+
+---
+
+## Screens
+
+- **Chat Interface:** Primary conversational view for uploading receipts and typing commands
+- **Confirmation Sheet:** Bottom-up drawer to review, manually edit, or confirm AI-extracted data
+- **Ledger Dashboard:** Visual summary of total balance, recent transactions, and outstanding IOUs
+- **Export & Settings:** Single hub for downloading Excel reports and adjusting account details
+
+---
+
+## Key Flows
+
+**Log a Receipt Expense:** User wants to record a petty cash outflow from a physical receipt.
+
+1. User is on Chat Interface -> sees "What did we spend on today?" prompt
+2. User clicks Camera Icon -> captures receipt
+3. AI processing bubble appears -> Confirmation Sheet slides up with extracted `Amount`, `Date`, and `Vendor`
+4. User taps "Looks Good" -> Expense is logged, balance updates, success message drops into chat
+
+**Log an IOU:** User loans petty cash to a colleague.
+
+1. User is on Chat Interface -> types "Gave Sarah $50 for lunch"
+2. User clicks Send -> Chat bubble appears
+3. Assistant replies with an IOU Confirmation Card -> User taps "Confirm IOU"
+4. Dashboard IOU tally updates, Assistant confirms with a playful message
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#FFD500` - Main actions, primary buttons, user chat bubbles
+- **Background:** `#FFFFFF` - App background
+- **Surface:** `#F4F4F5` - Assistant chat bubbles, input fields, bottom sheets
+- **Text:** `#09090B` - All primary typography, high contrast
+- **Muted:** `#71717A` - Timestamps, placeholder text, secondary icons
+- **Accent:** `#EF4444` - Error states, outstanding IOU tags, delete actions
+
+## Typography
+
+Choose fonts that are **distinctive and characterful**, bringing warmth to the rigid world of finance. 
+
+- **Headings:** `Fredoka`, 600, 24-32px
+- **Body:** `Nunito`, 600, 16px (Heavy weight for body adds to the chunky, friendly vibe)
+- **Small text:** `Nunito`, 500, 13px
+- **Buttons:** `Fredoka`, 600, 18px
+
+**Style notes:** Everything feels rounded and tactile. `24px` border radii on all containers, `999px` (pill) for buttons. No soft drop shadows—use crisp, hard-edged `2px` `#09090B` borders to create a comic-book-like separation between elements.
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #FFD500;
+  --color-background: #FFFFFF;
+  --color-surface: #F4F4F5;
+  --color-text: #09090B;
+  --color-muted: #71717A;
+  --color-accent: #EF4444;
+  --font-heading: 'Fredoka', sans-serif;
+  --font-body: 'Nunito', sans-serif;
+  --radius-bubbly: 24px;
+  --radius-pill: 999px;
+  --border-thick: 2px solid #09090B;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### Chat Interface
+
+**Purpose:** Main interaction hub for logging expenses, IOUs, and checking balances via natural language and image upload.
+
+**Layout:** Sticky top header (balance), scrollable conversational list (middle), fixed input area with quick actions (bottom).
+
+**Key Elements:**
+- **Header Ticker:** `56px` height, `#FFFFFF` background, thick bottom border. Displays real-time balance: `Vault: $1,240.50`.
+- **Chat Bubbles (Assistant):** `#F4F4F5` background, `24px` radius (bottom-left `4px`), `#09090B` text.
+- **Chat Bubbles (User):** `#FFD500` background, `24px` radius (bottom-right `4px`), `#09090B` text.
+- **Input Pill:** `56px` tall, `#FFFFFF` surface, thick `#09090B` border. Left-aligned camera icon, text input, right-aligned send arrow.
+
+**States:**
+- **Empty:** "Hey! Let's track some cash. Tap the camera to scan a receipt, or tell me what you spent."
+- **Loading:** Assistant bubble shows three bouncing black dots.
+- **Error:** Assistant bubble outlines in `#EF4444`, text reads "I couldn't quite read that receipt. Try typing the details!"
+
+**Components:**
+- **Quick Action Row:** Horizontal scrolling list of pills above input. `#F4F4F5` background, `14px` text. Copies: `Add Funds`, `Who owes me?`, `Export`.
+
+**Interactions:**
+- **Click Camera:** Opens native device camera.
+- **Swipe Down:** Dismisses keyboard.
+
+### Confirmation Sheet
+
+**Purpose:** Immediate fallback and verification UI for AI-extracted data.
+
+**Layout:** Bottom-anchored sheet occupying 60% of the screen.
+
+**Key Elements:**
+- **Drag Handle:** `40px` wide, `4px` thick, `#71717A`, top center.
+- **Thumbnail:** `80x80px` square, `12px` radius, cropped image of the uploaded receipt.
+- **Data Fields:** Stacked floating labels. `Amount`, `Date`, `Category`. `56px` height, `#F4F4F5` background, `2px` black border.
+- **Confirm Button:** Full width, `#FFD500` background, `56px` height, text "Looks Good!".
+
+**States:**
+- **Loading:** Skeleton pulses in input fields while AI is extracting.
+- **Error (AI Failure):** Fields remain empty with placeholder text "Enter manually", Thumbnail turns red.
+
+**Interactions:**
+- **Tap Field:** Highlights field with `#FFD500` border, opens numeric/text keyboard.
+- **Swipe Down:** Cancels entry, returns to chat.
+
+### Ledger Dashboard
+
+**Purpose:** Visual summary of all cash movements and outstanding debts.
+
+**Layout:** Top summary cards, followed by a segmented list (Recent / IOUs).
+
+**Key Elements:**
+- **Balance Card:** `#FFD500` background, bold `48px` text for balance, small text "Current Petty Cash".
+- **IOU Alert:** `#09090B` background, `#FFFFFF` text. Shows total money owed out: "Out in the wild: $320".
+- **Transaction List:** White surface. Each row is `72px` high, showing circular category icon, Vendor name, Date, and Amount (red for out, green/black for in).
+
+**States:**
+- **Empty:** Illustration of an empty wallet. Text: "Squeaky clean. No transactions yet."
+
+**Interactions:**
+- **Click Row:** Opens a small modal showing transaction details and receipt thumbnail.
+- **Click IOU Row:** Prompts "Mark as Paid?" with a swipe-to-confirm gesture.
+
+### Export & Settings
+
+**Purpose:** Utility screen for downloading the data to Excel and configuring the app.
+
+**Layout:** Simple vertical list of chunky buttons.
+
+**Key Elements:**
+- **Export Block:** Large `#FFD500` card. Title: "Get the Excel Sheet". Subtitle: "Download your ledger for accounting."
+- **Date Range Picker:** Two pill buttons `Start Date` and `End Date`.
+- **Download Button:** `#09090B` background, `#FFFFFF` text, text "Generate .XLSX".
+- **Danger Zone:** `#EF4444` bordered button to "Reset Ledger".
+
+**States:**
+- **Loading:** Download button spins and changes text to "Crunching numbers..."
+
+**Interactions:**
+- **Click Download:** Triggers native OS share sheet to save or send the Excel file.
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. **Chat Interface** - Core navigational paradigm, establishes the bubbly UI, thick borders, and primary yellow/black contrast.
+2. **Confirmation Sheet** - Crucial functional component for the core user loop (data verification).
+3. **Ledger Dashboard** - Extends the design system to standard lists and cards.
+4. **Export & Settings** - Simplest screen, reuses buttons and form elements.
+
+</details>

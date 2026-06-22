@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="#131b2e" name="theme-color"/>
+<title>مدیریت تنخواه | تنظیمات و خروجی</title>
+<link rel="manifest" href="./manifest.json"/>
+<link rel="apple-touch-icon" href="./icons/icon-192.png"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="./js/theme.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="./css/app.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="./config.js"></script>
+</head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+<!-- Header -->
+<header class="w-full top-0 sticky bg-background border-b border-outline-variant z-50">
+<div class="flex flex-row-reverse justify-between items-center px-margin-mobile h-14 w-full">
+<h1 class="font-headline-md text-headline-md font-bold text-secondary">تنظیمات و خروجی</h1>
+<span class="material-symbols-outlined text-primary">settings</span>
+</div>
+</header>
+<main class="px-margin-mobile pt-lg max-w-md mx-auto flex flex-col gap-lg">
+<!-- Export Block -->
+<section class="bg-secondary-container text-on-secondary-container rounded-xl p-lg flex flex-col gap-2 relative overflow-hidden shadow-soft">
+<div class="flex items-start justify-between relative z-10">
+<div class="text-right">
+<h2 class="font-headline-sm text-headline-sm mb-1">دریافت فایل اکسل</h2>
+<p class="text-sm opacity-90 leading-tight">گزارش تنخواه خود را برای حسابداری دانلود کنید.</p>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container text-2xl">description</span>
+</div>
+</div>
+</section>
+<!-- Date Range -->
+<section class="flex gap-md">
+<div class="flex-1 flex flex-col gap-xs text-right">
+<label class="font-label-bold text-label-bold text-on-surface-variant px-1">از تاریخ</label>
+<input id="from-date" type="text" placeholder="انتخاب" autocomplete="off" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-3 font-body-md text-body-md text-on-surface text-right"/>
+</div>
+<div class="flex-1 flex flex-col gap-xs text-right">
+<label class="font-label-bold text-label-bold text-on-surface-variant px-1">تا تاریخ</label>
+<input id="to-date" type="text" placeholder="انتخاب" autocomplete="off" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-3 font-body-md text-body-md text-on-surface text-right"/>
+</div>
+</section>
+<!-- Download Button -->
+<button id="export-btn" class="w-full bg-primary-container text-on-primary font-headline-sm text-headline-sm rounded-xl h-14 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" id="export-icon">download</span>
+<span id="export-text">ساخت فایل اکسل</span>
+</button>
+
+<hr class="border-t border-outline-variant my-1"/>
+
+<!-- Account Section -->
+<section class="flex flex-col gap-3">
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant px-1">حساب کاربری</h3>
+<div class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center justify-between text-right opacity-70">
+<div class="flex items-center gap-3 flex-row-reverse">
+<div class="w-10 h-10 bg-surface-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+<div class="text-right">
+<div class="font-body-lg text-on-surface">اطلاعات پروفایل</div>
+<div class="text-xs text-on-surface-variant">ورود کاربری — به‌زودی</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+</div>
+<div class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center justify-between text-right">
+<div class="flex items-center gap-3 flex-row-reverse">
+<div class="w-10 h-10 bg-surface-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</div>
+<div class="text-right">
+<div class="font-body-lg text-on-surface">اطلاعیه‌ها</div>
+<div class="text-xs text-on-surface-variant">فعال</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_left</span>
+</div>
+</section>
+
+<!-- Reset -->
+<div class="mt-4">
+<button id="reset-btn" class="w-full bg-background text-error font-headline-sm text-headline-sm rounded-xl h-14 border border-error hover:bg-error-container active:scale-[0.98] transition-all">
+پاکسازی تاریخچه
+</button>
+<p class="text-center text-xs text-on-surface-variant mt-3">این عمل تمام تراکنش‌ها را برای همیشه پاک می‌کند.</p>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full z-50 h-20 bg-surface-container-lowest border-t border-outline-variant shadow-sm">
+<div class="flex flex-row-reverse justify-around items-center w-full px-4 h-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="./index.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-bold text-label-bold">داشبورد</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="./transactions.html">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-bold text-label-bold">تراکنش‌ها</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:bg-surface-container-low transition-all active:scale-95 duration-100" href="./contacts.html">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-bold text-label-bold">بدهی‌ها</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-bold gap-1 active:scale-95 duration-100" href="./settings.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-bold text-label-bold">تنظیمات</span>
+</a>
+</div>
+</nav>
+<script src="./js/common.js"></script>
+<script src="./js/jdate.js"></script>
+<script src="./js/jalali-picker.js"></script>
+<script src="./js/supabase.js"></script>
+<script src="./js/settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="fa"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>تنظیمات و خروجی - Petty Cash</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&amp;family=Nunito:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#FFD500",
+          "background-light": "#FFFFFF",
+          "background-dark": "#09090B",
+          "surface": "#F4F4F5",
+          "muted": "#71717A",
+          "accent": "#EF4444",
+          "text-main": "#09090B",
+        },
+        fontFamily: {
+          "heading": ["Fredoka", "Nunito", "sans-serif"],
+          "body": ["Nunito", "sans-serif"],
+        },
+        borderRadius: {
+          "bubbly": "24px",
+          "pill": "999px",
+        },
+        borderWidth: {
+          "thick": "2px",
+        },
+      },
+    },
+  }
+</script>
+<style>
+  body {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    background-color: theme('colors.background-light');
+    color: theme('colors.text-main');
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  h1, h2, h3, .font-heading {
+    font-family: 'Fredoka', 'Nunito', sans-serif;
+  }
+
+  .text-small {
+    font-weight: 500;
+    font-size: 13px;
+  }
+
+  .border-comic {
+    border: 2px solid #09090B;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+  }
+  
+  /* Mirror icons for RTL if necessary */
+  [dir="rtl"] .mirror-rtl {
+    transform: scaleX(-1);
+  }
+</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-background-light relative pb-20">
+<!-- Header -->
+<header class="sticky top-0 z-10 bg-background-light border-b-2 border-text-main px-4 py-4 flex items-center justify-between">
+<h1 class="font-heading text-2xl tracking-wide">تنظیمات و خروجی</h1>
+<div class="w-10 h-10 bg-surface rounded-full border-comic flex items-center justify-center">
+<span class="material-symbols-outlined text-text-main">settings</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 p-4 flex flex-col gap-6">
+<!-- Export Block -->
+<section class="bg-primary rounded-bubbly border-comic p-6 flex flex-col gap-2 relative overflow-hidden text-right">
+<!-- Decorative Element -->
+<div class="absolute -left-6 -top-6 w-24 h-24 bg-white/30 rounded-full blur-xl"></div>
+<div class="flex items-start justify-between relative z-10">
+<div>
+<h2 class="font-heading text-2xl mb-1">دریافت فایل اکسل</h2>
+<p class="text-text-main/80 leading-tight">گزارش تنخواه خود را برای حسابداری دانلود کنید.</p>
+</div>
+<div class="w-12 h-12 bg-background-light rounded-full border-comic flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-text-main text-2xl">description</span>
+</div>
+</div>
+</section>
+<!-- Date Range Picker -->
+<section class="flex gap-4">
+<div class="flex-1 relative">
+<label class="sr-only" for="start-date">تاریخ شروع</label>
+<div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-muted text-xl">calendar_today</span>
+</div>
+<input class="w-full bg-surface border-comic rounded-pill py-4 pr-12 pl-4 text-text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-text-main cursor-pointer font-body text-right" id="start-date" placeholder="تاریخ شروع" readonly="" type="text" value="اکتبر ۰۱، ۲۰۲۳"/>
+</div>
+<div class="flex-1 relative">
+<label class="sr-only" for="end-date">تاریخ پایان</label>
+<div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-muted text-xl">calendar_month</span>
+</div>
+<input class="w-full bg-surface border-comic rounded-pill py-4 pr-12 pl-4 text-text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-text-main cursor-pointer font-body text-right" id="end-date" placeholder="تاریخ پایان" readonly="" type="text" value="اکتبر ۳۱، ۲۰۲۳"/>
+</div>
+</section>
+<!-- Download Button -->
+<button class="w-full bg-text-main text-background-light font-heading text-lg rounded-pill py-4 border-comic border-text-main hover:bg-text-main/90 active:scale-[0.98] transition-transform flex items-center justify-center gap-2" id="download-btn">
+<span class="material-symbols-outlined" id="download-icon">download</span>
+<span id="download-text">ساخت فایل اکسل</span>
+</button>
+<hr class="border-t-2 border-text-main/10 my-2"/>
+<!-- Settings Options -->
+<section class="flex flex-col gap-3">
+<h3 class="font-heading text-lg text-muted px-2">حساب کاربری</h3>
+<button class="w-full bg-surface border-comic rounded-bubbly p-4 flex items-center justify-between active:bg-surface/80 transition-colors text-right">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-background-light rounded-full border-comic flex items-center justify-center">
+<span class="material-symbols-outlined text-text-main">person</span>
+</div>
+<div>
+<div class="font-body text-text-main">اطلاعات پروفایل</div>
+<div class="text-small text-muted font-normal">Sarah Jenkins</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-muted mirror-rtl">chevron_right</span>
+</button>
+<button class="w-full bg-surface border-comic rounded-bubbly p-4 flex items-center justify-between active:bg-surface/80 transition-colors text-right">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-background-light rounded-full border-comic flex items-center justify-center">
+<span class="material-symbols-outlined text-text-main">notifications</span>
+</div>
+<div>
+<div class="font-body text-text-main">اطلاعیه‌ها</div>
+<div class="text-small text-muted font-normal">فعال</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-muted mirror-rtl">chevron_right</span>
+</button>
+</section>
+<div class="mt-8">
+<button class="w-full bg-background-light text-accent font-heading text-lg rounded-pill py-4 border-2 border-accent hover:bg-accent/10 active:scale-[0.98] transition-transform">
+        پاکسازی تاریخچه
+      </button>
+<p class="text-center text-small text-muted mt-3 font-normal">این عمل تمام تراکنش‌ها را برای همیشه پاک می‌کند.</p>
+</div>
+</main>
+<!-- Shared BottomNavBar Component -->
+<div class="fixed bottom-0 left-0 right-0 border-t-2 border-text-main bg-background-light px-4 pb-safe pt-2 z-50">
+<div class="flex gap-2 justify-between max-w-md mx-auto">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-muted hover:text-text-main transition-colors py-2" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="Chat" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined text-2xl">chat</span>
+</div>
+<p class="text-small leading-none mt-1">گفتگو</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-muted hover:text-text-main transition-colors py-2" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="List" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined text-2xl">list</span>
+</div>
+<p class="text-small leading-none mt-1">دفتر کل</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-text-main py-2" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="Gear" data-size="24px" data-weight="fill">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">settings</span>
+</div>
+<p class="text-small leading-none mt-1 font-bold">تنظیمات</p>
+</a>
+</div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const downloadBtn = document.getElementById('download-btn');
+      const downloadIcon = document.getElementById('download-icon');
+      const downloadText = document.getElementById('download-text');
+
+      downloadBtn.addEventListener('click', () => {
+        // Simple loading state simulation
+        downloadBtn.classList.add('opacity-90', 'cursor-not-allowed');
+        downloadIcon.classList.add('animate-spin');
+        downloadIcon.textContent = 'autorenew';
+        downloadText.textContent = 'در حال پردازش...';
+
+        setTimeout(() => {
+          downloadBtn.classList.remove('opacity-90', 'cursor-not-allowed');
+          downloadIcon.classList.remove('animate-spin');
+          downloadIcon.textContent = 'check';
+          downloadText.textContent = 'آماده اشتراک‌گذاری!';
+          
+          // Reset after a moment
+          setTimeout(() => {
+            downloadIcon.textContent = 'download';
+            downloadText.textContent = 'ساخت فایل اکسل';
+          }, 2000);
+        }, 1500);
+      });
+    });
+  </script>
+</body></html>

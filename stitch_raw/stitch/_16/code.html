@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="fa"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        /* Farsi Font Fallback - Using Inter as base for numbers and system fonts for Persian */
+        :root {
+            --farsi-font: 'Tahoma', 'Arial', sans-serif;
+        }
+        body {
+            font-family: 'Inter', var(--farsi-font);
+        }
+        .font-headline-sm, .font-headline-md, .font-headline-lg {
+            font-family: 'Plus Jakarta Sans', var(--farsi-font);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#bec6e0",
+                        "surface-container-highest": "#dfe3e7",
+                        "surface-variant": "#dfe3e7",
+                        "surface-container": "#eaeef2",
+                        "tertiary-fixed": "#d3e4fe",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#565e74",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "on-surface": "#171c1f",
+                        "primary-fixed": "#dae2fd",
+                        "on-surface-variant": "#45464d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "primary-container": "#131b2e",
+                        "surface-container-low": "#f0f4f8",
+                        "outline-variant": "#c6c6cd",
+                        "inverse-on-surface": "#edf1f5",
+                        "secondary": "#855300",
+                        "surface-bright": "#f6fafe",
+                        "tertiary": "#000000",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-secondary-container": "#684000",
+                        "on-primary-container": "#7c839b",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#131b2e",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "on-background": "#171c1f",
+                        "secondary-container": "#fea619",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#0b1c30",
+                        "outline": "#76777d",
+                        "surface-container-high": "#e4e9ed",
+                        "primary": "#000000",
+                        "on-tertiary-container": "#75859d",
+                        "background": "#f6fafe",
+                        "secondary-fixed": "#ffddb8",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface": "#f6fafe",
+                        "on-secondary-fixed": "#2a1700",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d6dade",
+                        "inverse-surface": "#2c3134"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "data-display": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "data-display": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "headline-md": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- Top App Bar -->
+<header class="bg-background dark:bg-background w-full top-0 sticky border-b border-outline-variant dark:border-outline z-50">
+<div class="flex flex-row-reverse justify-between items-center px-margin-mobile h-14 w-full">
+<div class="flex items-center gap-sm">
+<span class="font-headline-sm text-headline-sm text-primary">پروفایل همکار</span>
+<span class="material-symbols-outlined text-primary cursor-pointer active:opacity-80 transition-opacity" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<div class="flex items-center gap-sm">
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container-low transition-colors rounded-full" data-icon="more_vert">more_vert</button>
+</div>
+</div>
+</header>
+<main class="px-margin-mobile mt-lg max-w-4xl mx-auto space-y-lg">
+<!-- Profile Summary Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm relative overflow-hidden">
+<!-- Accent Strip -->
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-secondary"></div>
+<div class="flex flex-col md:flex-row items-center gap-lg">
+<div class="relative">
+<img class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-surface-container" data-alt="A professional portrait of a male office administrator in a bright, modern corporate environment. The lighting is clean and high-key, reflecting an industrial and organized atmosphere. He wears a smart-casual shirt, looking friendly and approachable. The background is a soft-focus office with minimalist white surfaces and subtle blue accents, aligning with the brand's professional and systematic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd7qVcrCwtEq2o1YXoQmRHQCq-zixqX3f4rqaegSS4zIOtoyItsehYKilitrK92wXf70alnHrkld_4CnE_nAmjG6XioHZssL0jMkFI_kTEDDhCzVrDR9mav8PxAq_8j1FpdOIl1aHe3OWQk9L1CVMMsAj9umFLyIUf8wkF9j5ARe3KZSCs5-AfVqTxMtwk-aa9O1GpleEonEBareUkyS82QOJYlVMA_sYRCheWOWcmpuqL6JQNIZUuh7CyRxyrPzSNcvYXk_x93-6i"/>
+<div class="absolute bottom-1 right-1 bg-green-500 w-5 h-5 rounded-full border-2 border-surface-container-lowest" title="آنلاین"></div>
+</div>
+<div class="flex-1 text-center md:text-right">
+<h1 class="font-headline-md text-headline-md text-on-surface mb-xs">علیرضا محمدی</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">تدارکات و لجستیک • شناسه: #۱۲۸۴</p>
+<div class="inline-flex items-center gap-xs px-md py-sm bg-error-container text-on-error-container rounded-lg border border-error/20">
+<span class="material-symbols-outlined text-[18px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-bold text-label-bold">بدهی فعلی: ۲,۱۰۰,۰۰۰ ریال</span>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="flex gap-sm">
+<button class="flex flex-col items-center gap-xs p-md min-w-[80px] bg-secondary-container text-on-secondary-container rounded-xl hover:opacity-90 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="call" data-weight="fill" style="font-variation-settings: 'FILL' 1;">call</span>
+<span class="font-label-bold text-label-bold">تماس</span>
+</button>
+<button class="flex flex-col items-center gap-xs p-md min-w-[80px] bg-surface-container-high text-on-surface border border-outline-variant rounded-xl hover:bg-surface-container-highest transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="chat" data-weight="fill" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="font-label-bold text-label-bold">پیام</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Transaction History Section -->
+<section class="space-y-md">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">تاریخچه تراکنش‌ها</h2>
+<!-- Filter Chips -->
+<div class="flex gap-xs overflow-x-auto pb-2 no-scrollbar">
+<button class="px-md py-1 bg-primary text-on-primary rounded-full font-label-bold text-label-bold">همه</button>
+<button class="px-md py-1 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest rounded-full font-label-bold text-label-bold transition-colors">در انتظار</button>
+<button class="px-md py-1 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest rounded-full font-label-bold text-label-bold transition-colors">تسویه شده</button>
+</div>
+</div>
+<!-- Transaction List -->
+<div class="space-y-sm">
+<!-- Transaction Item 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-center justify-between hover:border-secondary transition-all group">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-error-container/30 text-error flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+</div>
+<div>
+<p class="font-label-bold text-body-lg text-on-surface">فاکتور اسنپ - سفر کاری</p>
+<p class="font-label-bold text-label-bold text-on-surface-variant">۱۴۰۲/۰۸/۱۲ • ۱۲:۳۰</p>
+</div>
+</div>
+<div class="text-left">
+<p class="font-label-bold text-body-lg text-error">- ۴۵۰,۰۰۰ ریال</p>
+<span class="inline-block px-sm py-0.5 bg-yellow-100 text-yellow-800 rounded-full text-[10px] font-bold">در انتظار پرداخت</span>
+</div>
+</div>
+<!-- Transaction Item 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-center justify-between hover:border-secondary transition-all group">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+</div>
+<div>
+<p class="font-label-bold text-body-lg text-on-surface">تسویه تنخواه مهر ماه</p>
+<p class="font-label-bold text-label-bold text-on-surface-variant">۱۴۰۲/۰۸/۰۵ • ۰۹:۱۵</p>
+</div>
+</div>
+<div class="text-left">
+<p class="font-label-bold text-body-lg text-green-600">+ ۱,۵۰۰,۰۰۰ ریال</p>
+<span class="inline-block px-sm py-0.5 bg-green-100 text-green-800 rounded-full text-[10px] font-bold">تسویه شده</span>
+</div>
+</div>
+<!-- Transaction Item 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-center justify-between hover:border-secondary transition-all group">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="local_dining">local_dining</span>
+</div>
+<div>
+<p class="font-label-bold text-body-lg text-on-surface">خرید ناهار تیمی</p>
+<p class="font-label-bold text-label-bold text-on-surface-variant">۱۴۰۲/۰۷/۲۸ • ۱۴:۴۵</p>
+</div>
+</div>
+<div class="text-left">
+<p class="font-label-bold text-body-lg text-error">- ۳,۱۵۰,۰۰۰ ریال</p>
+<span class="inline-block px-sm py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-bold">تایید شده</span>
+</div>
+</div>
+<!-- Transaction Item 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-center justify-between hover:border-secondary transition-all group">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+</div>
+<div>
+<p class="font-label-bold text-body-lg text-on-surface">اقلام مصرفی انبار</p>
+<p class="font-label-bold text-label-bold text-on-surface-variant">۱۴۰۲/۰۷/۱۵ • ۱۰:۰۰</p>
+</div>
+</div>
+<div class="text-left">
+<p class="font-label-bold text-body-lg text-error">- ۸۹۰,۰۰۰ ریال</p>
+<span class="inline-block px-sm py-0.5 bg-green-100 text-green-800 rounded-full text-[10px] font-bold">تسویه شده</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="bg-surface-container p-md rounded-xl border border-outline-variant">
+<p class="font-label-bold text-label-bold text-on-surface-variant mb-xs">کل تراکنش‌ها</p>
+<p class="font-headline-sm text-headline-sm text-primary">۱۲ عدد</p>
+</div>
+<div class="bg-surface-container p-md rounded-xl border border-outline-variant">
+<p class="font-label-bold text-label-bold text-on-surface-variant mb-xs">پرداختی کل</p>
+<p class="font-headline-sm text-headline-sm text-green-600">۸,۴۰۰,۰۰۰ ریال</p>
+</div>
+<div class="bg-surface-container p-md rounded-xl border border-outline-variant">
+<p class="font-label-bold text-label-bold text-on-surface-variant mb-xs">تراکنش‌های باز</p>
+<p class="font-headline-sm text-headline-sm text-secondary">۳ مورد</p>
+</div>
+</section>
+</main>
+<!-- FAB for adding transaction -->
+<button class="fixed bottom-24 left-6 bg-secondary-container text-on-secondary-container w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40 border border-secondary/20">
+<span class="material-symbols-outlined text-[32px]" data-icon="add">add</span>
+</button>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 h-20 bg-surface-container-lowest border-t border-outline-variant shadow-sm flex flex-row-reverse justify-around items-center px-4">
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 transition-all active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-bold text-label-bold">داشبورد</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary font-bold gap-1 transition-all active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="receipt_long" data-weight="fill" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-bold text-label-bold">تراکنش‌ها</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 transition-all active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-label-bold text-label-bold">بدهی‌ها</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 transition-all active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-bold text-label-bold">تنظیمات</span>
+</div>
+</nav>
+<script>
+        // Simple Interaction logic
+        document.querySelectorAll('nav div').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('nav div').forEach(t => {
+                    t.classList.remove('text-secondary', 'font-bold');
+                    t.classList.add('text-on-surface-variant');
+                    const icon = t.querySelector('.material-symbols-outlined');
+                    icon.style.fontVariationSettings = "'FILL' 0";
+                });
+                tab.classList.add('text-secondary', 'font-bold');
+                tab.classList.remove('text-on-surface-variant');
+                const activeIcon = tab.querySelector('.material-symbols-outlined');
+                activeIcon.style.fontVariationSettings = "'FILL' 1";
+            });
+        });
+
+        // Filter button toggles
+        document.querySelectorAll('section div div button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('section div div button').forEach(b => {
+                    b.classList.remove('bg-primary', 'text-on-primary');
+                    b.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary', 'text-on-primary');
+                btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

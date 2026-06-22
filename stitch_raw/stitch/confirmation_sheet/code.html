@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Petty Cash - Confirmation Sheet</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2cc0d",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#221f10",
+                        "surface": "#F4F4F5",
+                        "text-main": "#09090B",
+                        "muted": "#71717A",
+                        "accent": "#EF4444"
+                    },
+                    fontFamily: {
+                        "display": ["Nunito Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                    boxShadow: {
+                        'hard': '0px 4px 0px 0px #09090B',
+                        'hard-sm': '0px 2px 0px 0px #09090B',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: #e5e5e5; /* Simulating the background behind the app */
+        }
+        
+        /* Bubbly UI specific styles */
+        .bubbly-border {
+            border: 2px solid #09090B;
+        }
+        
+        .bubbly-input:focus {
+            outline: none;
+            border-color: #f2cc0d;
+            box-shadow: 0 0 0 2px #f2cc0d inset, 0px 2px 0px 0px #09090B;
+        }
+
+        /* Slide up animation for the sheet */
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased text-text-main font-display flex items-center justify-center min-h-screen">
+<!-- Mobile Device Container -->
+<div class="relative w-full max-w-[400px] h-[800px] bg-background-light overflow-hidden border-4 border-text-main rounded-3xl shadow-2xl flex flex-col">
+<!-- Mock Chat Background (Context) -->
+<div class="flex-1 p-4 flex flex-col justify-end space-y-4 opacity-50 pb-32">
+<div class="self-end bg-primary text-text-main px-4 py-3 rounded-2xl rounded-br-sm bubbly-border max-w-[80%]">
+<p class="font-bold">Here's the receipt from lunch.</p>
+</div>
+<div class="self-end w-32 h-40 bg-surface rounded-xl bubbly-border overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A crumpled paper receipt with faded ink on a light gray table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAke6YgV08OcvTPviDvv3whieCPDFWQYWUOQ6gCppq9-aH9wPtzWXLofqPrt4-vpMrp8wa7yxyUZ2imZFe7T81bAggDitm2dWJdKB2z_D3-QFBnJoF_yxUG6TfjN2fBYukMsWvGF6ZOH2qDWc2A2TSYSNWGYHFL_ESbXI0r2JbaBOSKV7pn00yfJ9kCK7IJIwxSNCJw0uayo9lSncgw1kkQFvvkN8FN23PdK5--KW65Bvuh6S0Dj5rxKiwz-6Ji4LC4w3tq69n9lZeD"/>
+</div>
+<div class="self-start bg-surface text-text-main px-4 py-3 rounded-2xl rounded-bl-sm bubbly-border max-w-[80%] flex items-center space-x-2">
+<span class="material-symbols-outlined animate-bounce">more_horiz</span>
+</div>
+</div>
+<!-- Backdrop Overlay -->
+<div aria-hidden="true" class="absolute inset-0 bg-[#141414]/60 z-10 transition-opacity duration-300"></div>
+<!-- Confirmation Sheet (Bottom Sheet) -->
+<div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl z-20 flex flex-col max-h-[85%] animate-slide-up bubbly-border border-b-0 border-l-0 border-r-0 pb-6 pt-2 px-4">
+<!-- Shared Component: BottomSheetHandle (Modified for context) -->
+<div class="flex flex-col items-center w-full">
+<button class="flex h-6 w-full items-center justify-center cursor-grab active:cursor-grabbing focus:outline-none">
+<div class="h-1.5 w-12 rounded-full bg-muted/40"></div>
+</button>
+<div class="w-full pt-2 pb-4 flex justify-between items-center">
+<h1 class="text-text-main text-2xl font-extrabold tracking-tight">Does this look right?</h1>
+<button class="p-2 rounded-full bg-surface bubbly-border active:translate-y-0.5 active:shadow-none shadow-hard-sm transition-all focus:outline-none">
+<span class="material-symbols-outlined block">close</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto overflow-x-hidden pb-4 hide-scrollbar">
+<!-- Receipt Context -->
+<div class="flex items-center space-x-4 mb-6 p-3 bg-surface rounded-2xl bubbly-border">
+<div class="w-20 h-20 rounded-xl overflow-hidden bubbly-border shrink-0 bg-white">
+<img class="w-full h-full object-cover" data-alt="A close up shot of a restaurant receipt showing amounts and items on a white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm03s4B67yl1VgU3YBgJr7phq3CnynjgP7TKzXPVhC3KSUvXWRDNcKuWsOA13goMpcA2YgmJRwP-WsLazF2fvCrC6_tUfxTgTBL4AvRJLLYeM3HLwvjAdskdNIep8zl0UOwLO3zn0701ZRvr8ww2xXPaPaJYqoyX2Vm8BIQK4N22y2TxNr_lQgHv4lBw-8hAiq3AIe4od5j4e2dARfH8Ot2AqLK0U60baks963OOzUuQuCrTH-CnDE469KRl-fsA_LAGz9XDMZDv2Z"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-muted uppercase tracking-wider">Scanned Receipt</span>
+<span class="text-xs text-muted/80 mt-1">Tap fields below to edit if the AI made a mistake.</span>
+</div>
+</div>
+<!-- Input Fields -->
+<form class="space-y-4">
+<!-- Amount Field -->
+<div class="relative">
+<label class="absolute -top-2.5 left-4 px-2 bg-white text-xs font-bold text-muted uppercase tracking-wider z-10" for="amount">Amount</label>
+<div class="relative flex items-center">
+<span class="absolute left-4 text-xl font-extrabold text-text-main pointer-events-none">$</span>
+<input class="w-full h-14 pl-8 pr-4 bg-surface text-text-main text-xl font-extrabold rounded-full bubbly-border bubbly-input shadow-hard-sm transition-all" id="amount" inputmode="decimal" placeholder="0.00" type="text" value="42.50"/>
+</div>
+</div>
+<!-- Date Field -->
+<div class="relative mt-6">
+<label class="absolute -top-2.5 left-4 px-2 bg-white text-xs font-bold text-muted uppercase tracking-wider z-10" for="date">Date</label>
+<div class="relative flex items-center">
+<span class="absolute left-4 material-symbols-outlined text-muted pointer-events-none">calendar_today</span>
+<input class="w-full h-14 pl-12 pr-4 bg-surface text-text-main text-lg font-bold rounded-full bubbly-border bubbly-input shadow-hard-sm transition-all" id="date" placeholder="Select Date" type="text" value="Oct 24, 2023"/>
+</div>
+</div>
+<!-- Category Field -->
+<div class="relative mt-6">
+<label class="absolute -top-2.5 left-4 px-2 bg-white text-xs font-bold text-muted uppercase tracking-wider z-10" for="category">Category / Vendor</label>
+<div class="relative flex items-center">
+<span class="absolute left-4 material-symbols-outlined text-muted pointer-events-none">storefront</span>
+<input class="w-full h-14 pl-12 pr-4 bg-surface text-text-main text-lg font-bold rounded-full bubbly-border bubbly-input shadow-hard-sm transition-all" id="category" placeholder="Where or what?" type="text" value="Deli Co. Lunch"/>
+</div>
+</div>
+</form>
+</div>
+<!-- Action Button -->
+<div class="pt-4 mt-auto border-t-2 border-text-main/10">
+<button class="w-full h-14 bg-primary text-text-main text-xl font-extrabold rounded-full bubbly-border shadow-hard active:translate-y-1 active:shadow-none transition-all flex items-center justify-center space-x-2">
+<span>Looks Good!</span>
+<span class="material-symbols-outlined font-bold">check_circle</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+        // Micro-interaction for inputs to show active state clearly
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.parentElement.querySelector('label').classList.replace('text-muted', 'text-text-main');
+                input.parentElement.parentElement.querySelector('label').classList.add('text-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.parentElement.querySelector('label').classList.replace('text-text-main', 'text-muted');
+                input.parentElement.parentElement.querySelector('label').classList.remove('text-primary');
+            });
+        });
+    </script>
+</body></html>

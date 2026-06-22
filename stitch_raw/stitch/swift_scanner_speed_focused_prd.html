@@ -1,0 +1,180 @@
+# Swift Scanner (Speed Focused)
+
+## Product Overview
+
+**The Pitch:** A high-velocity, industrial-grade petty cash tracker. Snap a receipt, auto-extract the data, and log it instantly—designed for high-glare environments and one-handed operation.
+
+**For:** Field managers and petty cash officers who need to process dozens of receipts rapidly without manual data entry. 
+
+**Device:** mobile
+
+**Design Direction:** High-contrast, utilitarian brutalism. Inspired by warehouse barcode scanners and high-vis construction gear. Maximum visibility, zero decorative elements.
+
+**Inspired by:** Flexport mobile, industrial Zebra scanner interfaces.
+
+---
+
+## Screens
+
+- **Home (Recent):** Chronological feed of today's scans with a massive camera FAB.
+- **Scanner:** Full-bleed camera viewfinder with framing guides and flash toggle.
+- **Confirmation:** Instant OCR result validation (Amount, Merchant, Date) before saving.
+- **Receipt Detail:** Immutable record of a saved expense with the original cropped image.
+- **Export:** One-tap ledger generation (CSV/PDF) for the accounting department.
+
+---
+
+## Key Flows
+
+**Capture & Confirm:** Rapidly log a new receipt.
+
+1. User is on **Home** -> sees recent logs and a pulsing yellow camera button.
+2. User clicks **Camera FAB** -> viewfinder opens instantly.
+3. User aligns receipt and snaps -> transitions to **Confirmation**.
+4. User taps **Confirm & Save** -> returns to Home with a new entry at the top.
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#FFE800` - "High-Vis Yellow". Camera FAB, primary actions, active states.
+- **Background:** `#0A0A0A` - "Vantablack". App background, maximizes OLED battery and contrast.
+- **Surface:** `#171717` - "Carbon". Receipt cards, bottom sheets.
+- **Text:** `#FFFFFF` - "Pure White". Primary values, titles.
+- **Muted:** `#8A8A8A` - "Concrete". Secondary labels, timestamps.
+- **Accent:** `#FF3B30` - "Alert Red". Error states, delete actions.
+
+## Typography
+
+Distinctive, technical, and built for legibility under harsh lighting.
+
+- **Headings:** `Space Grotesk`, 700, 24-32px
+- **Data/Amounts:** `JetBrains Mono`, 700, 32-48px (Monospaced for financial data)
+- **Body:** `Space Grotesk`, 500, 16px
+- **Small text:** `Space Grotesk`, 400, 13px
+- **Buttons:** `Space Grotesk`, 700, 16px, uppercase
+
+**Style notes:** Sharp corners (`0px` or `4px` max radius). High contrast borders (`1px solid #333`). Heavy typography. No gradients. No soft shadows.
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #FFE800;
+  --color-background: #0A0A0A;
+  --color-surface: #171717;
+  --color-text: #FFFFFF;
+  --color-muted: #8A8A8A;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-fab: 80px;
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### Home (Recent)
+
+**Purpose:** View today's burn rate and access the scanner.
+
+**Layout:** Top header (total spent today), scrolling list of cards, massive bottom-center FAB.
+
+**Key Elements:**
+- **Daily Total:** `JetBrains Mono`, 48px, `#FFE800`. Label: "TODAY'S SPEND".
+- **Expense List:** Chronological. Each row shows Merchant (left), Amount (right, monospaced), Time (bottom left).
+- **Camera FAB:** 80x80px circle, fixed bottom center. Background `#FFE800`, black camera icon, 4px black border.
+
+**States:**
+- **Empty:** Large text "NO SCANS TODAY". Arrow pointing down to the FAB.
+
+**Interactions:**
+- **Click Camera FAB:** Immediate transition (no animation delay) to Scanner.
+- **Click Expense Row:** Slide right-to-left into Receipt Detail.
+
+### Scanner
+
+**Purpose:** Capture the physical receipt.
+
+**Layout:** Full-bleed camera view. Minimal dark overlays top and bottom.
+
+**Key Elements:**
+- **Viewfinder:** 100% height/width live camera feed.
+- **Framing Reticle:** White corner brackets `⌜ ⌝`, 2px thick. Turns yellow `#FFE800` when auto-focus locks.
+- **Shutter Button:** 72x72px, `#FFE800` border, `#FFFFFF` inner circle.
+- **Flash Toggle:** Top right, `#FFFFFF` icon.
+
+**Interactions:**
+- **Tap Shutter:** Screen flashes `#FFFFFF` for 100ms. Transitions to Confirmation.
+
+### Confirmation
+
+**Purpose:** Validate OCR data before saving to ledger.
+
+**Layout:** Split screen. Top 40% shows cropped receipt image. Bottom 60% shows extracted data forms.
+
+**Key Elements:**
+- **Cropped Image:** Zoomable, pan-able preview of the receipt.
+- **Amount Input:** Massive `JetBrains Mono` text field, 40px, `#FFE800`.
+- **Merchant Input:** Standard text field, `Space Grotesk`, 18px.
+- **Date/Time:** Pre-filled with capture time.
+- **Confirm Button:** Fixed bottom, 100% width, 64px height, `#FFE800` background, black text "SAVE TO LEDGER".
+
+**States:**
+- **Loading:** Pulsing "EXTRACTING DATA..." in mono font.
+
+**Interactions:**
+- **Click Input:** Opens numeric/standard keyboard.
+- **Click Save:** Success haptic (double tap), slide down transition back to Home.
+
+### Receipt Detail
+
+**Purpose:** Review a previously logged expense.
+
+**Layout:** Similar to Confirmation, but read-only.
+
+**Key Elements:**
+- **Status Badge:** "SYNCED" (`#FFE800` border, `#FFE800` text).
+- **Data Lock:** All fields disabled.
+- **Delete Button:** Bottom edge, ghost button, `#FF3B30` text "VOID ENTRY".
+
+### Export
+
+**Purpose:** Send the daily/weekly ledger to accounting.
+
+**Layout:** Simple list of date ranges, massive export action.
+
+**Key Elements:**
+- **Timeframe Selector:** "Today", "This Week", "Custom". Radio buttons, `#FFE800` active state.
+- **Format Toggle:** CSV or PDF.
+- **Send Button:** 100% width, 64px height, `#FFE800`. Text "GENERATE REPORT".
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. **Home:** Establishes the dark theme, mono typography, and the core FAB component.
+2. **Scanner:** Implements full-viewport layout and camera framing UI.
+3. **Confirmation:** Builds the form inputs and data extraction layout.
+4. **Receipt Detail:** Reuses Confirmation layout but styles for read-only.
+5. **Export:** Adds standard settings/export toggles.
+
+</details>
