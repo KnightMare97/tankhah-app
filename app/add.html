@@ -35,33 +35,15 @@
 </div>
 </div>
 
-<form id="tx-form" class="w-full max-w-lg px-margin-mobile py-xl flex flex-col gap-lg pb-32">
-<!-- مسئول پرداخت -->
-<div id="payer-block" class="flex flex-col gap-xs text-right">
-<label class="font-label-bold text-label-bold text-on-surface-variant px-1">مسئول پرداخت</label>
+<form id="tx-form" class="w-full max-w-lg px-margin-mobile py-xl flex flex-col gap-lg pb-40">
+<!-- نوع تراکنش (انتخاب سه‌حالته) -->
+<div class="flex flex-col gap-2">
 <div class="segmented-control p-1 rounded-xl flex flex-row-reverse w-full">
-<button type="button" data-paid="self" class="paid-item active flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface">خودم پرداخت کردم</button>
-<button type="button" data-paid="contact" class="paid-item flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface-variant">همکار پرداخت کرد (طلب)</button>
+<button type="button" data-kind="expense" class="kind-item active flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface">هزینه</button>
+<button type="button" data-kind="income" class="kind-item flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface-variant">شارژ</button>
+<button type="button" data-kind="debt" class="kind-item flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface-variant">طلب همکار</button>
 </div>
-</div>
-
-<!-- انتخاب همکار (فقط برای حالت طلب) -->
-<div id="contact-wrapper" class="flex flex-col gap-xs text-right hidden">
-<label class="font-label-bold text-label-bold text-on-surface-variant px-1">همکار طلبکار</label>
-<div class="relative">
-<select id="contact-select" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 appearance-none font-body-md text-body-md text-on-surface">
-<option value="">انتخاب همکار…</option>
-</select>
-<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
-</div>
-</div>
-</div>
-
-<!-- نوع تراکنش -->
-<div class="segmented-control p-1 rounded-xl flex flex-row-reverse w-full">
-<button type="button" id="type-expense" data-type="expense" class="type-item active flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface">هزینه</button>
-<button type="button" id="type-income" data-type="income" class="type-item flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface-variant">شارژ تنخواه</button>
+<p id="kind-hint" class="text-xs text-on-surface-variant px-1 text-right">پرداخت از صندوق/کارت خودت.</p>
 </div>
 
 <!-- مبلغ -->
@@ -71,7 +53,7 @@
 <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
 <span class="material-symbols-outlined text-secondary-container">payments</span>
 </div>
-<input id="amount" required class="w-full h-20 text-center font-data-display text-data-display bg-transparent border-none focus:ring-0 text-on-surface currency-font" dir="ltr" inputmode="numeric" placeholder="۰" type="text"/>
+<input id="amount" required class="w-full h-20 text-center font-data-display text-data-display bg-transparent border-none focus:ring-0 text-on-surface currency-font" dir="ltr" inputmode="numeric" enterkeyhint="next" placeholder="۰" type="text"/>
 <div class="absolute right-0 top-0 w-1 h-full bg-secondary-container"></div>
 </div>
 </div>
@@ -96,7 +78,7 @@
 </div>
 <!-- کارت / کیف‌پول -->
 <div id="card-block" class="flex flex-col gap-xs text-right">
-<label class="font-label-bold text-label-bold text-on-surface-variant px-1">کارت / کیف‌پول</label>
+<label id="card-label" class="font-label-bold text-label-bold text-on-surface-variant px-1">کارت / کیف‌پول</label>
 <div class="relative">
 <select id="card-select" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 appearance-none font-body-md text-body-md text-on-surface">
 <option value="">بدون کارت</option>
@@ -106,40 +88,56 @@
 </div>
 </div>
 </div>
+<!-- انتخاب همکار (فقط حالت طلب) -->
+<div id="contact-wrapper" class="flex flex-col gap-xs text-right hidden">
+<label class="font-label-bold text-label-bold text-on-surface-variant px-1">همکار طلبکار</label>
+<div class="relative">
+<select id="contact-select" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 appearance-none font-body-md text-body-md text-on-surface">
+<option value="">انتخاب همکار…</option>
+</select>
+<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</div>
+</div>
+</div>
+<!-- رسید / فاکتور (دوربین یا گالری) -->
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-bold text-label-bold text-on-surface-variant px-1">تصویر رسید / فاکتور</label>
+<div id="drop-zone" class="relative border-2 border-dashed border-secondary-container rounded-xl bg-surface-container-high h-28 flex flex-col items-center justify-center cursor-pointer hover:bg-surface-container transition-colors overflow-hidden">
+<input class="hidden" id="file-upload" type="file" accept="image/*,application/pdf"/>
+<img id="preview" class="absolute inset-0 w-full h-full object-cover hidden" alt="پیش‌نمایش رسید"/>
+<span id="upload-icon" class="material-symbols-outlined text-secondary-container text-3xl mb-1">photo_camera</span>
+<span id="upload-label" class="font-label-bold text-on-surface">عکس بگیر یا انتخاب کن</span>
+<span class="font-body-md text-on-surface-variant text-center px-4 text-xs mt-0.5">دوربین، گالری یا فایل PDF</span>
+</div>
+</div>
 <!-- شرح -->
 <div class="flex flex-col gap-xs text-right">
 <label id="title-label" class="font-label-bold text-label-bold text-on-surface-variant px-1">شرح یا فروشنده</label>
-<input id="title" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 font-body-md text-body-md text-on-surface" placeholder="مثلاً: خرید ملزومات اداری" type="text"/>
+<input id="title" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 font-body-md text-body-md text-on-surface" placeholder="مثلاً: خرید ملزومات اداری" type="text" enterkeyhint="done"/>
 </div>
 <!-- تاریخ -->
 <div class="flex flex-col gap-xs text-right">
 <label class="font-label-bold text-label-bold text-on-surface-variant px-1">تاریخ تراکنش</label>
 <div class="relative">
-<input id="date" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 font-body-md text-body-md text-on-surface text-right" type="text" placeholder="انتخاب تاریخ" autocomplete="off"/>
+<input id="date" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 font-body-md text-body-md text-on-surface text-right" type="text" placeholder="انتخاب تاریخ" autocomplete="off" readonly/>
 <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
 <span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
 </div>
 </div>
 </div>
-<!-- آپلود رسید -->
-<div class="flex flex-col gap-xs text-right">
-<label class="font-label-bold text-label-bold text-on-surface-variant px-1">تصویر رسید</label>
-<div id="drop-zone" class="relative border-2 border-dashed border-secondary-container rounded-xl bg-surface-container-high h-40 flex flex-col items-center justify-center cursor-pointer hover:bg-surface-container transition-colors overflow-hidden">
-<input class="hidden" id="file-upload" type="file" accept="image/*"/>
-<img id="preview" class="absolute inset-0 w-full h-full object-cover hidden" alt="پیش‌نمایش رسید"/>
-<span id="upload-icon" class="material-symbols-outlined text-secondary-container text-4xl mb-2">cloud_upload</span>
-<span id="upload-label" class="font-label-bold text-on-surface">بارگذاری تصویر رسید یا فاکتور</span>
-<span class="font-body-md text-on-surface-variant text-center px-4 mt-1">برای انتخاب فایل کلیک کنید</span>
 </div>
-</div>
-</div>
+</form>
 
-<!-- دکمه ثبت -->
-<button type="submit" id="submit-btn" class="w-full h-14 bg-secondary-container text-on-secondary-container rounded-xl font-headline-sm text-headline-sm shadow-md active:scale-[0.98] transition-transform flex items-center justify-center gap-2 mt-4 hover:brightness-110">
+<!-- دکمه ثبت (چسبیده به پایین) -->
+<div class="fixed bottom-20 left-0 right-0 z-40 pointer-events-none">
+<div class="max-w-lg mx-auto px-margin-mobile pb-3 pt-8 bg-gradient-to-t from-background via-background to-transparent pointer-events-auto">
+<button type="submit" form="tx-form" id="submit-btn" class="w-full h-14 bg-secondary-container text-on-secondary-container rounded-xl font-headline-sm text-headline-sm shadow-md active:scale-[0.98] transition-transform flex items-center justify-center gap-2 hover:brightness-110">
 ثبت تراکنش
 <span class="material-symbols-outlined">check_circle</span>
 </button>
-</form>
+</div>
+</div>
 
 <!-- Bottom Navigation -->
 <nav class="fixed bottom-0 w-full z-50 h-20 bg-surface-container-lowest border-t border-outline-variant flex flex-row-reverse justify-around items-center px-4">

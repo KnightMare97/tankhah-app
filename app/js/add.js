@@ -1,14 +1,18 @@
-// فرم ثبت/ویرایش تراکنش: نوع (هزینه/شارژ)، مسئول پرداخت، آپلود عکس، ذخیره در دیتابیس
+// فرم ثبت/ویرایش تراکنش
+// سه حالت: هزینه (expense/self) | شارژ (income) | طلب همکار (expense/contact)
 (function () {
   const $ = (id) => document.getElementById(id);
   const cfg = window.TANKHAH_CONFIG;
   const params = new URLSearchParams(location.search);
   const editId = params.get("id");
 
-  let type = "expense";   // expense | income(شارژ)
-  let paidBy = "self";    // self | contact
+  let kind = "expense";   // expense | income | debt
   let selectedFile = null;
   let original = null;    // رکورد اصلی در حالت ویرایش
+
+  // نگاشت حالت سه‌گانه به ستون‌های دیتابیس
+  const typeOf = (k) => (k === "income" ? "income" : "expense");
+  const paidOf = (k) => (k === "debt" ? "contact" : "self");
 
   // تقویم شمسی روی فیلد تاریخ
   JalaliPicker.attach($("date"), { iso: localDateStr() });
@@ -22,48 +26,54 @@
   const setAmount = (n) => (amountEl.value = n ? toFa(Number(n).toLocaleString("en-US")) : "");
   const amountValue = () => Number(toEn(amountEl.value).replace(/[^0-9]/g, "")) || 0;
 
-  // ---- سوییچ‌ها ----
-  document.querySelectorAll(".type-item").forEach((b) =>
-    b.addEventListener("click", () => setType(b.dataset.type)));
-  document.querySelectorAll(".paid-item").forEach((b) =>
-    b.addEventListener("click", () => setPaid(b.dataset.paid)));
+  // ---- انتخاب سه‌حالته ----
+  document.querySelectorAll(".kind-item").forEach((b) =>
+    b.addEventListener("click", () => setKind(b.dataset.kind)));
 
-  function setType(t) {
-    type = t;
-    document.querySelectorAll(".type-item").forEach((b) => {
-      const on = b.dataset.type === t;
+  function setKind(k) {
+    kind = k;
+    document.querySelectorAll(".kind-item").forEach((b) => {
+      const on = b.dataset.kind === k;
       b.classList.toggle("active", on);
       b.classList.toggle("text-on-surface", on);
       b.classList.toggle("text-on-surface-variant", !on);
     });
-    // در حالت شارژ (درآمد) فیلدهای نامربوط مخفی می‌شوند
-    const income = t === "income";
-    $("payer-block").classList.toggle("hidden", income);
-    $("category-block").classList.toggle("hidden", income);
-    if (income) { setPaid("self"); $("contact-wrapper").classList.add("hidden"); }
+    // نمایش فیلدها بر اساس حالت
+    $("category-block").classList.toggle("hidden", k === "income"); // دسته فقط برای هزینه/طلب
+    $("card-block").classList.toggle("hidden", k === "debt");       // کارت برای هزینه/شارژ
+    $("contact-wrapper").classList.toggle("hidden", k !== "debt");  // همکار فقط برای طلب
     updateLabels();
-    updateCardVisibility();
-  }
-
-  function setPaid(p) {
-    paidBy = p;
-    document.querySelectorAll(".paid-item").forEach((b) => {
-      const on = b.dataset.paid === p;
-      b.classList.toggle("active", on);
-      b.classList.toggle("text-on-surface", on);
-      b.classList.toggle("text-on-surface-variant", !on);
-    });
-    $("contact-wrapper").classList.toggle("hidden", p !== "contact");
-    updateCardVisibility();
   }
 
   function updateLabels() {
-    const income = type === "income";
-    $("page-title").textContent = editId ? "ویرایش تراکنش" : income ? "شارژ تنخواه" : "ثبت تراکنش";
-    $("title-label").textContent = income ? "بابت (اختیاری)" : "شرح یا فروشنده";
-    $("title").placeholder = income ? "مثلاً: واریز از حساب مرکزی" : "مثلاً: خرید ملزومات اداری";
-    const submitText = editId ? "ذخیره تغییرات" : income ? "ثبت شارژ" : "ثبت تراکنش";
+    const hint = {
+      expense: "پرداخت از صندوق/کارت خودت.",
+      income: "واریز پول به صندوق/کارت تنخواه.",
+      debt: "همکار از جیب خودش پرداخت کرده و طلبکار است.",
+    }[kind];
+    $("kind-hint").textContent = hint;
+
+    $("page-title").textContent = editId ? "ویرایش تراکنش"
+      : kind === "income" ? "شارژ تنخواه" : kind === "debt" ? "ثبت طلب همکار" : "ثبت هزینه";
+
+    $("card-label").textContent = kind === "income" ? "واریز به کدام کارت؟" : "از کدام کارت؟";
+
+    $("title-label").textContent = kind === "income" ? "بابت (اختیاری)" : "شرح یا فروشنده";
+    $("title").placeholder = kind === "income"
+      ? "مثلاً: واریز از حساب مرکزی"
+      : kind === "debt" ? "مثلاً: خرید ناهار تیمی" : "مثلاً: خرید ملزومات اداری";
+
+    const submitText = editId ? "ذخیره تغییرات"
+      : kind === "income" ? "ثبت شارژ" : kind === "debt" ? "ثبت طلب" : "ثبت هزینه";
     $("submit-btn").innerHTML = `${submitText} <span class="material-symbols-outlined">check_circle</span>`;
+  }
+
+  // افزودن گزینه‌ی «+ جدید» به انتهای یک select
+  function appendNewOption(sel, label) {
+    const o = document.createElement("option");
+    o.value = "__new__";
+    o.textContent = label;
+    sel.appendChild(o);
   }
 
   // ---- بارگذاری همکاران ----
@@ -76,9 +86,10 @@
       o.textContent = c.unit ? `${c.name} — ${c.unit}` : c.name;
       sel.appendChild(o);
     });
+    appendNewOption(sel, "+ همکار جدید…");
   })();
 
-  // ---- بارگذاری کارت‌ها ----
+  // ---- بارگذاری کارت‌ها (+ پیش‌انتخاب وقتی فقط یک کارت هست) ----
   const cardsReady = (async () => {
     const { data } = await sb.from("cards").select("id,name").order("name");
     const sel = $("card-select");
@@ -88,15 +99,53 @@
       o.textContent = c.name;
       sel.appendChild(o);
     });
+    appendNewOption(sel, "+ کارت جدید…");
+    if (!editId && (data || []).length === 1) sel.value = data[0].id;
   })();
 
-  // کارت فقط وقتی پولی از صندوق جابه‌جا می‌شود معنا دارد (نه برای طلب همکار)
-  function updateCardVisibility() {
-    const isContactDebt = type === "expense" && paidBy === "contact";
-    $("card-block").classList.toggle("hidden", isContactDebt);
-  }
+  // افزودن همکار/کارت بدون ترک فرم
+  $("contact-select").addEventListener("change", async (e) => {
+    if (e.target.value !== "__new__") return;
+    e.target.value = "";
+    const vals = await Modal.form({
+      title: "افزودن همکار",
+      fields: [
+        { id: "name", label: "نام همکار", required: true, placeholder: "مثلاً: علی محمدی" },
+        { id: "unit", label: "واحد / دپارتمان", placeholder: "اختیاری" },
+      ],
+      submitText: "افزودن",
+    });
+    if (!vals) return;
+    const { data, error } = await sb.from("contacts").insert({ name: vals.name, unit: vals.unit || null }).select().single();
+    if (error) return toast("خطا در افزودن همکار", "error");
+    const o = document.createElement("option");
+    o.value = data.id;
+    o.textContent = data.unit ? `${data.name} — ${data.unit}` : data.name;
+    e.target.insertBefore(o, e.target.querySelector('option[value="__new__"]'));
+    e.target.value = data.id;
+    toast("همکار اضافه شد ✅");
+  });
 
-  // ---- انتخاب و پیش‌نمایش عکس ----
+  $("card-select").addEventListener("change", async (e) => {
+    if (e.target.value !== "__new__") return;
+    e.target.value = "";
+    const vals = await Modal.form({
+      title: "افزودن کارت",
+      fields: [{ id: "name", label: "نام کارت / کیف‌پول", required: true, placeholder: "مثلاً: کارت ملت یا کیف‌پول اسنپ" }],
+      submitText: "افزودن",
+    });
+    if (!vals) return;
+    const { data, error } = await sb.from("cards").insert({ name: vals.name }).select().single();
+    if (error) return toast("خطا در افزودن کارت", "error");
+    const o = document.createElement("option");
+    o.value = data.id;
+    o.textContent = data.name;
+    e.target.insertBefore(o, e.target.querySelector('option[value="__new__"]'));
+    e.target.value = data.id;
+    toast("کارت اضافه شد ✅");
+  });
+
+  // ---- انتخاب و پیش‌نمایش عکس/فایل ----
   const dropZone = $("drop-zone");
   const fileInput = $("file-upload");
   dropZone.addEventListener("click", () => fileInput.click());
@@ -109,9 +158,13 @@
     if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
   });
   function handleFile(file) {
-    if (!file || !file.type.startsWith("image/")) return;
+    if (!file) return;
+    const isImg = file.type.startsWith("image/");
+    const isPdf = file.type === "application/pdf";
+    if (!isImg && !isPdf) return toast("فقط عکس یا فایل PDF مجاز است", "error");
     selectedFile = file;
-    showPreview(URL.createObjectURL(file), "تصویر انتخاب شد — برای تغییر کلیک کنید");
+    if (isImg) showPreview(URL.createObjectURL(file), "تصویر انتخاب شد — برای تغییر بزنید");
+    else showFileChosen("فایل PDF انتخاب شد — برای تغییر بزنید");
   }
   function showPreview(url, label) {
     const img = $("preview");
@@ -120,6 +173,21 @@
     $("upload-icon").classList.add("hidden");
     $("upload-label").textContent = label;
   }
+  function showFileChosen(label) {
+    $("preview").classList.add("hidden");
+    const icon = $("upload-icon");
+    icon.classList.remove("hidden");
+    icon.textContent = "picture_as_pdf";
+    $("upload-label").textContent = label;
+  }
+
+  // مسیر فایل داخل باکت از روی لینک عمومی (برای حذف فایل قدیمی)
+  function storagePath(url) {
+    if (!url) return null;
+    const marker = "/" + cfg.BUCKET + "/";
+    const i = url.indexOf(marker);
+    return i === -1 ? null : decodeURIComponent(url.slice(i + marker.length));
+  }
 
   // ---- مقداردهی اولیه (حالت جدید یا ویرایش) ----
   (async () => {
@@ -127,7 +195,8 @@
       const { data, error } = await sb.from("transactions").select("*").eq("id", editId).single();
       if (error || !data) { toast("تراکنش یافت نشد", "error"); return; }
       original = data;
-      setType(data.type);
+      const k = data.type === "income" ? "income" : (data.paid_by === "contact" ? "debt" : "expense");
+      setKind(k);
       setAmount(data.amount);
       $("title").value = data.title || "";
       if (data.category) $("category").value = data.category;
@@ -135,22 +204,22 @@
         $("date").dataset.iso = data.transaction_date;
         $("date").value = JalaliPicker.shamsiText(data.transaction_date);
       }
-      if (data.type === "expense") {
-        setPaid(data.paid_by);
-        if (data.paid_by === "contact" && data.contact_id) {
-          await contactsReady;
-          $("contact-select").value = data.contact_id;
-        }
+      if (k === "debt" && data.contact_id) {
+        await contactsReady;
+        $("contact-select").value = data.contact_id;
       }
       if (data.card_id) { await cardsReady; $("card-select").value = data.card_id; }
-      if (data.image_url) showPreview(data.image_url, "تصویر فعلی — برای تغییر کلیک کنید");
+      if (data.image_url) {
+        if (/\.pdf($|\?)/i.test(data.image_url)) showFileChosen("فایل فعلی — برای تغییر بزنید");
+        else showPreview(data.image_url, "تصویر فعلی — برای تغییر بزنید");
+      }
     } else {
       $("date").dataset.iso = localDateStr();
       $("date").value = JalaliPicker.shamsiText(localDateStr());
-      if (params.get("type") === "income") setType("income");
-      else setType("expense");
+      setKind(params.get("type") === "income" ? "income" : "expense");
+      // باز شدن سریع کیبورد روی مبلغ
+      setTimeout(() => amountEl.focus(), 350);
     }
-    updateLabels();
   })();
 
   // ---- ثبت / ذخیره ----
@@ -158,8 +227,8 @@
     e.preventDefault();
     const amount = amountValue();
     if (amount <= 0) return toast("لطفاً مبلغ معتبر وارد کنید", "error");
-    if (type === "expense" && !$("category").value) return toast("لطفاً دسته‌بندی را انتخاب کنید", "error");
-    if (type === "expense" && paidBy === "contact" && !$("contact-select").value)
+    if (kind !== "income" && !$("category").value) return toast("لطفاً دسته‌بندی را انتخاب کنید", "error");
+    if (kind === "debt" && !$("contact-select").value)
       return toast("لطفاً همکار طلبکار را انتخاب کنید", "error");
 
     const btn = $("submit-btn");
@@ -168,7 +237,7 @@
     btn.innerHTML = `<span class="material-symbols-outlined animate-spin">autorenew</span> در حال ذخیره...`;
 
     try {
-      // آپلود عکس جدید (در صورت انتخاب)
+      // آپلود فایل جدید (در صورت انتخاب)
       let image_url = original ? original.image_url : null;
       if (selectedFile) {
         const ext = (selectedFile.name.split(".").pop() || "jpg").toLowerCase();
@@ -179,16 +248,16 @@
         image_url = sb.storage.from(cfg.BUCKET).getPublicUrl(path).data.publicUrl;
       }
 
-      const isContactDebt = type === "expense" && paidBy === "contact";
+      const isDebt = kind === "debt";
       const row = {
         title: $("title").value.trim() || null,
         amount,
-        category: type === "expense" ? $("category").value : null,
-        type,
-        paid_by: type === "expense" ? paidBy : "self",
-        status: !isContactDebt ? "confirmed" : (original ? original.status : "pending"),
-        contact_id: isContactDebt ? $("contact-select").value : null,
-        card_id: isContactDebt ? null : ($("card-select").value || null),
+        category: kind === "income" ? null : $("category").value,
+        type: typeOf(kind),
+        paid_by: paidOf(kind),
+        status: !isDebt ? "confirmed" : (original ? original.status : "pending"),
+        contact_id: isDebt ? $("contact-select").value : null,
+        card_id: isDebt ? null : ($("card-select").value || null),
         transaction_date: $("date").dataset.iso || localDateStr(),
         image_url,
       };
@@ -196,11 +265,16 @@
       if (editId) {
         const { error } = await sb.from("transactions").update(row).eq("id", editId);
         if (error) throw error;
+        // حذف فایل قدیمی پس از جایگزینی موفق (جلوگیری از انباشت فایل بی‌استفاده)
+        if (selectedFile && original && original.image_url && original.image_url !== image_url) {
+          const old = storagePath(original.image_url);
+          if (old) sb.storage.from(cfg.BUCKET).remove([old]);
+        }
         toast("تغییرات ذخیره شد ✅");
       } else {
         const { error } = await sb.from("transactions").insert(row);
         if (error) throw error;
-        toast(type === "income" ? "شارژ ثبت شد ✅" : "تراکنش ثبت شد ✅");
+        toast(kind === "income" ? "شارژ ثبت شد ✅" : "تراکنش ثبت شد ✅");
       }
       setTimeout(() => (location.href = "./transactions.html"), 800);
     } catch (err) {

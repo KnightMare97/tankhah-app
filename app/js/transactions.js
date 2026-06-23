@@ -112,6 +112,11 @@
       if (!ok) return;
       const { error } = await sb.from("transactions").delete().eq("id", id);
       if (error) { console.error(error); return toast("خطا در حذف", "error"); }
+      // حذف فایل فاکتور از Storage (جلوگیری از فایل بی‌استفاده)
+      const bucket = window.TANKHAH_CONFIG.BUCKET;
+      const marker = "/" + bucket + "/";
+      const at = (t.image_url || "").indexOf(marker);
+      if (at !== -1) sb.storage.from(bucket).remove([decodeURIComponent(t.image_url.slice(at + marker.length))]);
       toast("تراکنش حذف شد");
       ALL = ALL.filter((x) => x.id !== id);
       render();
