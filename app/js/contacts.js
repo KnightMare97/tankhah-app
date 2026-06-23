@@ -8,16 +8,17 @@
     try {
       const [{ data: contacts, error: e1 }, { data: txns, error: e2 }] = await Promise.all([
         sb.from("contacts").select("*").order("name"),
-        sb.from("transactions").select("amount,contact_id,status").eq("paid_by", "contact").eq("type", "expense"),
+        sb.from("transactions").select("amount,contact_id,type,paid_by").not("contact_id", "is", null),
       ]);
       if (e1) throw e1;
       if (e2) throw e2;
 
+      // بدهی هر همکار = مجموع طلب‌ها − مجموع تسویه‌ها
       const debtMap = {};
       (txns || []).forEach((t) => {
-        if (t.contact_id && t.status !== "settled" && t.status !== "reimbursed") {
-          debtMap[t.contact_id] = (debtMap[t.contact_id] || 0) + t.amount;
-        }
+        if (!t.contact_id) return;
+        if (t.type === "settlement") debtMap[t.contact_id] = (debtMap[t.contact_id] || 0) - t.amount;
+        else if (t.paid_by === "contact") debtMap[t.contact_id] = (debtMap[t.contact_id] || 0) + t.amount;
       });
       const list = (contacts || []).map((c) => ({ ...c, _debt: debtMap[c.id] || 0 }))
         .sort((a, b) => b._debt - a._debt);
@@ -83,20 +84,38 @@
   }
 
   async function settle(c) {
-    const ok = await Modal.confirm({
-      title: "تسویه بدهی",
-      message: `بدهی «${c.name}» به مبلغ ${formatToman(c._debt)} تومان تسویه شود؟`,
-      confirmText: "تسویه",
+    if (c._debt <= 0) return;
+    // کارت‌ها برای انتخاب منبع پرداخت تسویه
+    const { data: cards } = await sb.from("cards").select("id,name").order("name");
+    const cardOpts = [{ value: "", label: "بدون کارت" }].concat((cards || []).map((x) => ({ value: x.id, label: x.name })));
+
+    const vals = await Modal.form({
+      title: `تسویه با ${c.name}`,
+      fields: [
+        { id: "amount", label: "مبلغ تسویه (تومان)", inputmode: "numeric", value: String(c._debt), required: true, hint: `بدهی فعلی: ${formatToman(c._debt)} تومان — برای تسویه‌ی جزئی مبلغ کمتری بزن.` },
+        { id: "card", label: "از کدام کارت پرداخت شد؟", type: "select", options: cardOpts, value: "" },
+      ],
+      submitText: "ثبت تسویه",
     });
-    if (!ok) return;
+    if (!vals) return;
+    const amount = Number(toEn(vals.amount).replace(/[^0-9]/g, "")) || 0;
+    if (amount <= 0) return toast("مبلغ تسویه نامعتبر است", "error");
+    if (amount > c._debt) return toast("مبلغ تسویه نباید بیشتر از بدهی باشد", "error");
     try {
-      const { error } = await sb.from("transactions")
-        .update({ status: "settled" })
-        .eq("contact_id", c.id).eq("paid_by", "contact").neq("status", "settled");
+      const { error } = await sb.from("transactions").insert({
+        type: "settlement",
+        amount,
+        contact_id: c.id,
+        card_id: vals.card || null,
+        paid_by: "self",
+        status: "confirmed",
+        title: `تسویه طلب ${c.name}`,
+        transaction_date: localDateStr(),
+      });
       if (error) throw error;
-      toast("بدهی تسویه شد ✅");
+      toast(amount >= c._debt ? "بدهی کامل تسویه شد ✅" : "تسویه‌ی جزئی ثبت شد ✅");
       load();
-    } catch (e) { console.error(e); toast("خطا در تسویه بدهی", "error"); }
+    } catch (e) { console.error(e); toast("خطا در ثبت تسویه", "error"); }
   }
 
   async function editContact(c) {

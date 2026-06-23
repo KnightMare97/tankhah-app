@@ -56,21 +56,41 @@
         return;
       }
 
+      const typeLabel = (t) => t.type === "income" ? "شارژ" : t.type === "settlement" ? "تسویه" : "هزینه";
       const rows = data.map((t) => ({
         "تاریخ": t.transaction_date,
         "شرح / فروشنده": t.title || "",
-        "دسته‌بندی": categoryMeta(t.category).label,
-        "نوع": t.type === "income" ? "شارژ" : "هزینه",
+        "دسته‌بندی": t.category ? categoryMeta(t.category).label : "—",
+        "نوع": typeLabel(t),
         "مبلغ (تومان)": t.amount,
         "مسئول پرداخت": t.paid_by === "contact" ? "همکار (طلب)" : "صندوق",
         "کارت": t.cards?.name || "",
         "همکار": t.contacts?.name || "",
         "وضعیت": ({ pending: "در انتظار", confirmed: "تأیید شده", settled: "تسویه شده", reimbursed: "بازپرداخت" }[t.status] || t.status),
-        "لینک فاکتور": t.image_url || "",
+        "تصویر فاکتور": "",
+        "لینک فاکتور": "",
       }));
 
       const ws = XLSX.utils.json_to_sheet(rows);
-      ws["!cols"] = [{ wch: 12 }, { wch: 28 }, { wch: 16 }, { wch: 8 }, { wch: 16 }, { wch: 14 }, { wch: 16 }, { wch: 16 }, { wch: 12 }, { wch: 40 }];
+      ws["!cols"] = [{ wch: 12 }, { wch: 28 }, { wch: 16 }, { wch: 8 }, { wch: 16 }, { wch: 14 }, { wch: 16 }, { wch: 16 }, { wch: 12 }, { wch: 22 }, { wch: 18 }];
+
+      // عکس فاکتور داخل سلول (Excel 365 / Google Sheets) + لینک کلیک‌پذیر برای همه
+      const IMG_COL = 9, LINK_COL = 10;
+      const isPdf = (u) => /\.pdf($|\?)/i.test(u || "");
+      const rowHeights = [{}]; // ردیف هدر
+      data.forEach((t, i) => {
+        const r = i + 1;
+        rowHeights[r] = {};
+        const url = t.image_url;
+        if (!url) return;
+        ws[XLSX.utils.encode_cell({ r, c: LINK_COL })] = { t: "s", v: "باز کردن فاکتور", l: { Target: url, Tooltip: "مشاهده‌ی فاکتور" } };
+        if (!isPdf(url)) {
+          ws[XLSX.utils.encode_cell({ r, c: IMG_COL })] = { t: "s", f: `IMAGE("${url}")`, v: "" };
+          rowHeights[r] = { hpt: 56 };
+        }
+      });
+      ws["!rows"] = rowHeights;
+
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "تنخواه");
       XLSX.writeFile(wb, `tankhah-${fromIso || "all"}_${toIso || "all"}.xlsx`);

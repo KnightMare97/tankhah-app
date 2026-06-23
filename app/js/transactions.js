@@ -46,7 +46,7 @@
   function matches(t) {
     if (filter === "expense" && t.type !== "expense") return false;
     if (filter === "income" && t.type !== "income") return false;
-    if (filter === "debt" && !(t.type === "expense" && t.paid_by === "contact")) return false;
+    if (filter === "debt" && !((t.type === "expense" && t.paid_by === "contact") || t.type === "settlement")) return false;
     if (query) {
       const hay = `${t.title || ""} ${categoryMeta(t.category).label} ${t.contacts?.name || ""} ${t.cards?.name || ""}`.toLowerCase();
       if (!hay.includes(query)) return false;
@@ -94,19 +94,19 @@
   async function openTxMenu(id) {
     const t = ALL.find((x) => x.id === id);
     if (!t) return;
-    const choice = await Modal.actions({
-      title: escapeHtml(t.title || categoryMeta(t.category).label),
-      items: [
-        { label: "ویرایش", icon: "edit", value: "edit" },
-        { label: "حذف", icon: "delete", value: "delete", danger: true },
-      ],
-    });
+    const isSettlement = t.type === "settlement";
+    const label = t.title || (isSettlement ? "تسویه" : categoryMeta(t.category).label);
+    // تسویه از طریق فرم ثبت ویرایش نمی‌شود؛ فقط حذف
+    const items = isSettlement
+      ? [{ label: "حذف تسویه", icon: "delete", value: "delete", danger: true }]
+      : [{ label: "ویرایش", icon: "edit", value: "edit" }, { label: "حذف", icon: "delete", value: "delete", danger: true }];
+    const choice = await Modal.actions({ title: escapeHtml(label), items });
     if (choice === "edit") {
       location.href = "./add.html?id=" + encodeURIComponent(id);
     } else if (choice === "delete") {
       const ok = await Modal.confirm({
-        title: "حذف تراکنش",
-        message: `«${t.title || categoryMeta(t.category).label}» به مبلغ ${formatToman(t.amount)} تومان حذف شود؟`,
+        title: isSettlement ? "حذف تسویه" : "حذف تراکنش",
+        message: `«${label}» به مبلغ ${formatToman(t.amount)} تومان حذف شود؟`,
         confirmText: "حذف", danger: true,
       });
       if (!ok) return;
@@ -126,15 +126,18 @@
   function itemHtml(t) {
     const c = categoryMeta(t.category);
     const isIncome = t.type === "income";
+    const isSettlement = t.type === "settlement";
     const isDebt = t.type === "expense" && t.paid_by === "contact";
-    const stripColor = isIncome ? "bg-[#1b5e20]" : isDebt ? "bg-secondary-container" : "bg-error";
-    const iconBg = isIncome ? "bg-tertiary-fixed" : isDebt ? "bg-secondary-fixed" : "bg-error-container";
-    const iconFg = isIncome ? "text-on-tertiary-fixed" : isDebt ? "text-on-secondary-container" : "text-error";
-    const amountColor = isIncome ? "" : isDebt ? "text-secondary" : "text-error";
-    const amountStyle = isIncome ? 'style="color:#1b5e20"' : "";
+    const stripColor = isIncome ? "bg-[#1b5e20]" : isSettlement ? "bg-[#00695c]" : isDebt ? "bg-secondary-container" : "bg-error";
+    const iconBg = isIncome || isSettlement ? "bg-tertiary-fixed" : isDebt ? "bg-secondary-fixed" : "bg-error-container";
+    const iconFg = isIncome || isSettlement ? "text-on-tertiary-fixed" : isDebt ? "text-on-secondary-container" : "text-error";
+    const amountColor = isIncome || isSettlement ? "" : isDebt ? "text-secondary" : "text-error";
+    const amountStyle = isIncome ? 'style="color:#1b5e20"' : isSettlement ? 'style="color:#00695c"' : "";
     const sign = isIncome ? "+" : "−";
+    const icon = isIncome ? "payments" : isSettlement ? "handshake" : c.icon;
+    const heading = t.title || (isSettlement ? "تسویه" : c.label);
     const parts = [];
-    if (!isIncome) parts.push(c.label);
+    if (!isIncome && !isSettlement) parts.push(c.label);
     if (t.cards?.name) parts.push(t.cards.name);
     if (t.contacts?.name) parts.push(t.contacts.name);
     const subtitle = (parts.length ? parts.join(" • ") + " • " : "") + timeOf(t.created_at);
@@ -143,10 +146,10 @@
     <div data-tx="${t.id}" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 flex flex-row-reverse items-center gap-4 hover:bg-surface-container-low transition-colors cursor-pointer relative overflow-hidden">
       <div class="absolute right-0 top-0 bottom-0 w-1 ${stripColor}"></div>
       <div class="w-12 h-12 rounded-lg ${iconBg} flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined ${iconFg}">${isIncome ? "payments" : c.icon}</span>
+        <span class="material-symbols-outlined ${iconFg}">${icon}</span>
       </div>
       <div class="flex-grow text-right">
-        <h3 class="font-headline-sm text-sm text-on-surface">${escapeHtml(t.title || c.label)}</h3>
+        <h3 class="font-headline-sm text-sm text-on-surface">${escapeHtml(heading)}</h3>
         <p class="text-xs text-on-surface-variant">${escapeHtml(subtitle)}</p>
       </div>
       <div class="text-left">

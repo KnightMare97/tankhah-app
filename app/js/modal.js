@@ -71,13 +71,24 @@
   function form({ title, fields = [], submitText = "ذخیره", cancelText = "انصراف" }) {
     return new Promise((resolve) => {
       resolver = resolve;
-      const fieldsHtml = fields.map((f) => `
-        <div class="flex flex-col gap-xs text-right mb-4">
+      const fieldsHtml = fields.map((f) => {
+        const control = f.type === "select"
+          ? `<div class="relative">
+               <select data-field="${esc(f.id)}" ${f.required ? "required" : ""}
+                 class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 appearance-none font-body-md text-body-md text-on-surface text-right">
+                 ${(f.options || []).map((o) => `<option value="${esc(o.value)}" ${String(o.value) === String(f.value ?? "") ? "selected" : ""}>${esc(o.label)}</option>`).join("")}
+               </select>
+               <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none"><span class="material-symbols-outlined text-on-surface-variant">expand_more</span></div>
+             </div>`
+          : `<input data-field="${esc(f.id)}" type="${f.type || "text"}" value="${esc(f.value ?? "")}"
+               placeholder="${esc(f.placeholder || "")}" ${f.required ? "required" : ""} ${f.inputmode ? `inputmode="${esc(f.inputmode)}"` : ""}
+               class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 font-body-md text-body-md text-on-surface text-right"/>`;
+        return `<div class="flex flex-col gap-xs text-right mb-4">
           <label class="font-label-bold text-label-bold text-on-surface-variant px-1">${esc(f.label)}</label>
-          <input data-field="${esc(f.id)}" type="${f.type || "text"}" value="${esc(f.value || "")}"
-            placeholder="${esc(f.placeholder || "")}" ${f.required ? "required" : ""}
-            class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 font-body-md text-body-md text-on-surface text-right"/>
-        </div>`).join("");
+          ${control}
+          ${f.hint ? `<p class="text-xs text-on-surface-variant px-1">${esc(f.hint)}</p>` : ""}
+        </div>`;
+      }).join("");
       const sheet = show(`
         <form data-form class="text-right">
           <h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">${esc(title)}</h3>

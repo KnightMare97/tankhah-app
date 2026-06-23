@@ -12,22 +12,29 @@
 
     const rows = txns || [];
 
-    // موجودی فعلی = درآمدها − هزینه‌هایی که از خود صندوق پرداخت شده
-    let income = 0, expenseFromFund = 0, expenseTotal = 0, debt = 0;
+    // موجودی صندوق = شارژها − هزینه‌های صندوقی − تسویه‌های پرداخت‌شده به همکاران
+    let income = 0, expenseFromFund = 0, expenseTotal = 0, settlements = 0, debtCharges = 0;
+    const perDebt = {}; // بدهی هر همکار: طلب − تسویه
     for (const t of rows) {
       if (t.type === "income") {
         income += t.amount;
+      } else if (t.type === "settlement") {
+        // تسویه: پول از صندوق به همکار رفت → موجودی کم، بدهی کم (هزینه‌ی جدید نیست)
+        settlements += t.amount;
+        if (t.contact_id) perDebt[t.contact_id] = (perDebt[t.contact_id] || 0) - t.amount;
       } else {
         expenseTotal += t.amount;
         if (t.paid_by === "contact") {
           // طلب همکار: از موجودی صندوق کم نمی‌شود، بدهی محسوب می‌شود
-          if (t.status !== "settled" && t.status !== "reimbursed") debt += t.amount;
+          debtCharges += t.amount;
+          if (t.contact_id) perDebt[t.contact_id] = (perDebt[t.contact_id] || 0) + t.amount;
         } else {
           expenseFromFund += t.amount;
         }
       }
     }
-    const balance = income - expenseFromFund;
+    const debt = Math.max(0, debtCharges - settlements);
+    const balance = income - expenseFromFund - settlements;
 
     // موجودی می‌تواند منفی باشد (وقتی هزینه بیش از شارژ ثبت‌شده است) — علامت و رنگ را نشان بده
     const balEl = $("balance");
@@ -49,8 +56,8 @@
       ? `بیشترین هزینه مربوط به «${categoryMeta(top[0]).label}» بوده است.`
       : "هنوز هزینه‌ای ثبت نشده است.";
 
-    // اقدامات لازم: تراکنش‌های در انتظار
-    renderActions(rows.filter((t) => t.status === "pending"));
+    // اقدامات لازم: طلب همکارهایی که هنوز بدهی باز دارند
+    renderActions(rows.filter((t) => t.status === "pending" && t.paid_by === "contact" && (perDebt[t.contact_id] || 0) > 0));
 
     // موجودی هر کارت
     await renderCards(rows);

@@ -45,8 +45,9 @@ function cardBalances(txns) {
   const m = {};
   for (const t of txns || []) {
     const key = t.card_id || CARD_NONE;
-    if (t.type === "income") m[key] = (m[key] || 0) + t.amount;
-    else if (t.paid_by !== "contact") m[key] = (m[key] || 0) - t.amount;
+    if (t.type === "income") m[key] = (m[key] || 0) + t.amount;            // شارژ (+)
+    else if (t.type === "settlement") m[key] = (m[key] || 0) - t.amount;   // تسویه‌ی طلب همکار (−)
+    else if (t.paid_by !== "contact") m[key] = (m[key] || 0) - t.amount;   // هزینه از صندوق (−)
   }
   return m;
 }
