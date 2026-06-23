@@ -11,7 +11,7 @@
     try {
       const { data, error } = await sb
         .from("transactions")
-        .select("*, contacts(name)")
+        .select("*, contacts(name), cards(name)")
         .order("transaction_date", { ascending: false })
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -48,7 +48,7 @@
     if (filter === "income" && t.type !== "income") return false;
     if (filter === "debt" && !(t.type === "expense" && t.paid_by === "contact")) return false;
     if (query) {
-      const hay = `${t.title || ""} ${categoryMeta(t.category).label} ${t.contacts?.name || ""}`.toLowerCase();
+      const hay = `${t.title || ""} ${categoryMeta(t.category).label} ${t.contacts?.name || ""} ${t.cards?.name || ""}`.toLowerCase();
       if (!hay.includes(query)) return false;
     }
     return true;
@@ -130,6 +130,7 @@
     const sign = isIncome ? "+" : "−";
     const parts = [];
     if (!isIncome) parts.push(c.label);
+    if (t.cards?.name) parts.push(t.cards.name);
     if (t.contacts?.name) parts.push(t.contacts.name);
     const subtitle = (parts.length ? parts.join(" • ") + " • " : "") + timeOf(t.created_at);
 

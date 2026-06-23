@@ -37,6 +37,20 @@ function categoryMeta(key) {
   return CATEGORIES[key] || { label: key || "بدون دسته", icon: "receipt_long", bg: "bg-surface-container-high", fg: "text-on-surface-variant" };
 }
 
+// محاسبه‌ی موجودی هر کارت از روی تراکنش‌ها
+//   شارژ (+) ، هزینه‌ی پرداخت‌شده از صندوق (−) ؛ طلب همکار روی موجودی کارت اثر ندارد.
+//   خروجی: { [card_id|"__none__"]: balance }
+const CARD_NONE = "__none__";
+function cardBalances(txns) {
+  const m = {};
+  for (const t of txns || []) {
+    const key = t.card_id || CARD_NONE;
+    if (t.type === "income") m[key] = (m[key] || 0) + t.amount;
+    else if (t.paid_by !== "contact") m[key] = (m[key] || 0) - t.amount;
+  }
+  return m;
+}
+
 const STATUS_LABEL = {
   pending:    "در انتظار",
   confirmed:  "تأیید شده",

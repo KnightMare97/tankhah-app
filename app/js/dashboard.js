@@ -46,6 +46,9 @@
 
     // اقدامات لازم: تراکنش‌های در انتظار
     renderActions(rows.filter((t) => t.status === "pending"));
+
+    // موجودی هر کارت
+    await renderCards(rows);
   } catch (e) {
     console.error(e);
     toast("خطا در بارگذاری داشبورد", "error");
@@ -79,5 +82,30 @@
       </a>`;
       })
       .join("");
+  }
+
+  async function renderCards(rows) {
+    const section = $("cards-section");
+    const { data: cards } = await sb.from("cards").select("id,name").order("name");
+    if (!cards || !cards.length) { section.classList.add("hidden"); return; }
+    const bal = cardBalances(rows);
+    const cardRow = (name, b, icon) => `
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-center justify-between relative overflow-hidden hover:shadow-md">
+        <div class="absolute right-0 top-0 bottom-0 w-1 ${b < 0 ? "bg-error" : "bg-secondary-container"}"></div>
+        <div class="flex items-center gap-3 flex-row-reverse">
+          <div class="w-10 h-10 bg-secondary-fixed rounded-lg flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-secondary-container">${icon}</span>
+          </div>
+          <span class="font-body-lg text-on-surface">${escapeHtml(name)}</span>
+        </div>
+        <div class="text-left">
+          <span class="font-headline-sm text-headline-sm currency-font ${b < 0 ? "text-error" : "text-on-surface"}">${b < 0 ? "−" : ""}${formatToman(b)}</span>
+          <span class="text-[10px] text-on-surface-variant">تومان</span>
+        </div>
+      </div>`;
+    let html = cards.map((c) => cardRow(c.name, bal[c.id] || 0, "credit_card")).join("");
+    if (bal[CARD_NONE]) html += cardRow("بدون کارت", bal[CARD_NONE], "wallet");
+    $("cards-list").innerHTML = html;
+    section.classList.remove("hidden");
   }
 })();

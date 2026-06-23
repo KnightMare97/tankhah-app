@@ -143,7 +143,7 @@
     });
     if (!vals) return;
     try {
-      const { error } = await sb.from("contacts").insert({ name: vals.name, unit: vals.unit || null, debt_amount: 0 });
+      const { error } = await sb.from("contacts").insert({ name: vals.name, unit: vals.unit || null });
       if (error) throw error;
       toast("همکار اضافه شد ✅");
       load();

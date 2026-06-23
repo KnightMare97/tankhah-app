@@ -42,6 +42,7 @@
     $("category-block").classList.toggle("hidden", income);
     if (income) { setPaid("self"); $("contact-wrapper").classList.add("hidden"); }
     updateLabels();
+    updateCardVisibility();
   }
 
   function setPaid(p) {
@@ -53,6 +54,7 @@
       b.classList.toggle("text-on-surface-variant", !on);
     });
     $("contact-wrapper").classList.toggle("hidden", p !== "contact");
+    updateCardVisibility();
   }
 
   function updateLabels() {
@@ -75,6 +77,24 @@
       sel.appendChild(o);
     });
   })();
+
+  // ---- بارگذاری کارت‌ها ----
+  const cardsReady = (async () => {
+    const { data } = await sb.from("cards").select("id,name").order("name");
+    const sel = $("card-select");
+    (data || []).forEach((c) => {
+      const o = document.createElement("option");
+      o.value = c.id;
+      o.textContent = c.name;
+      sel.appendChild(o);
+    });
+  })();
+
+  // کارت فقط وقتی پولی از صندوق جابه‌جا می‌شود معنا دارد (نه برای طلب همکار)
+  function updateCardVisibility() {
+    const isContactDebt = type === "expense" && paidBy === "contact";
+    $("card-block").classList.toggle("hidden", isContactDebt);
+  }
 
   // ---- انتخاب و پیش‌نمایش عکس ----
   const dropZone = $("drop-zone");
@@ -122,6 +142,7 @@
           $("contact-select").value = data.contact_id;
         }
       }
+      if (data.card_id) { await cardsReady; $("card-select").value = data.card_id; }
       if (data.image_url) showPreview(data.image_url, "تصویر فعلی — برای تغییر کلیک کنید");
     } else {
       $("date").dataset.iso = localDateStr();
@@ -167,6 +188,7 @@
         paid_by: type === "expense" ? paidBy : "self",
         status: !isContactDebt ? "confirmed" : (original ? original.status : "pending"),
         contact_id: isContactDebt ? $("contact-select").value : null,
+        card_id: isContactDebt ? null : ($("card-select").value || null),
         transaction_date: $("date").dataset.iso || localDateStr(),
         image_url,
       };
