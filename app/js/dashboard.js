@@ -29,7 +29,12 @@
     }
     const balance = income - expenseFromFund;
 
-    $("balance").textContent = formatToman(balance);
+    // موجودی می‌تواند منفی باشد (وقتی هزینه بیش از شارژ ثبت‌شده است) — علامت و رنگ را نشان بده
+    const balEl = $("balance");
+    const neg = balance < 0;
+    balEl.textContent = (neg ? "−" : "") + formatToman(balance);
+    balEl.classList.toggle("text-white", !neg);
+    balEl.classList.toggle("text-error-container", neg);
     $("total-expenses").textContent = formatToman(expenseTotal);
     $("total-debt").textContent = formatToman(debt);
     $("updated-at").textContent = "به‌روزرسانی شده: " + timeOf(new Date().toISOString());

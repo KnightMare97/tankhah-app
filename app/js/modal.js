@@ -11,13 +11,21 @@
       <div data-backdrop class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-200"></div>
       <div data-sheet class="absolute bottom-0 left-0 right-0 bg-surface-container-lowest rounded-t-2xl p-5 pb-8 max-w-md mx-auto translate-y-full transition-transform duration-250 shadow-soft" dir="rtl"></div>`;
     document.body.appendChild(root);
-    root.querySelector("[data-backdrop]").addEventListener("click", () => close(null));
+    // بستن با ضربه به پس‌زمینه — ولی نه بلافاصله بعد از باز شدن (جلوگیری از بستهٔ ناخواسته با همان لمس)
+    root.querySelector("[data-backdrop]").addEventListener("click", () => {
+      if (Date.now() - shownAt < 350) return;
+      close(null);
+    });
     return root;
   }
 
   let resolver = null;
+  let hideTimer = null;   // تایمر بستن؛ هنگام باز شدن مودال بعدی پاک می‌شود
+  let shownAt = 0;
   function show(sheetHtml) {
     ensureRoot();
+    clearTimeout(hideTimer);            // اگر مودال قبلی در حال بسته‌شدن بود، لغو کن
+    shownAt = Date.now();
     const sheet = root.querySelector("[data-sheet]");
     sheet.innerHTML = sheetHtml;
     root.classList.remove("hidden");
@@ -33,7 +41,8 @@
     const sheet = root.querySelector("[data-sheet]");
     root.querySelector("[data-backdrop]").classList.add("opacity-0");
     sheet.classList.add("translate-y-full");
-    setTimeout(() => root.classList.add("hidden"), 250);
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => root.classList.add("hidden"), 250);
     if (resolver) { const r = resolver; resolver = null; r(value); }
   }
 
