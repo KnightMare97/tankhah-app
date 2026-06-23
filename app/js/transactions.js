@@ -85,6 +85,37 @@
       </div>`;
       })
       .join("");
+
+    // لمس هر تراکنش → منوی ویرایش/حذف
+    box.querySelectorAll("[data-tx]").forEach((el) =>
+      el.addEventListener("click", () => openTxMenu(el.dataset.tx)));
+  }
+
+  async function openTxMenu(id) {
+    const t = ALL.find((x) => x.id === id);
+    if (!t) return;
+    const choice = await Modal.actions({
+      title: escapeHtml(t.title || categoryMeta(t.category).label),
+      items: [
+        { label: "ویرایش", icon: "edit", value: "edit" },
+        { label: "حذف", icon: "delete", value: "delete", danger: true },
+      ],
+    });
+    if (choice === "edit") {
+      location.href = "./add.html?id=" + encodeURIComponent(id);
+    } else if (choice === "delete") {
+      const ok = await Modal.confirm({
+        title: "حذف تراکنش",
+        message: `«${t.title || categoryMeta(t.category).label}» به مبلغ ${formatToman(t.amount)} تومان حذف شود؟`,
+        confirmText: "حذف", danger: true,
+      });
+      if (!ok) return;
+      const { error } = await sb.from("transactions").delete().eq("id", id);
+      if (error) { console.error(error); return toast("خطا در حذف", "error"); }
+      toast("تراکنش حذف شد");
+      ALL = ALL.filter((x) => x.id !== id);
+      render();
+    }
   }
 
   function itemHtml(t) {
@@ -97,10 +128,13 @@
     const amountColor = isIncome ? "" : isDebt ? "text-secondary" : "text-error";
     const amountStyle = isIncome ? 'style="color:#1b5e20"' : "";
     const sign = isIncome ? "+" : "−";
-    const subtitle = [c.label, t.contacts?.name].filter(Boolean).join(" • ") + " • " + timeOf(t.created_at);
+    const parts = [];
+    if (!isIncome) parts.push(c.label);
+    if (t.contacts?.name) parts.push(t.contacts.name);
+    const subtitle = (parts.length ? parts.join(" • ") + " • " : "") + timeOf(t.created_at);
 
     return `
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 flex flex-row-reverse items-center gap-4 hover:bg-surface-container-low transition-colors cursor-pointer relative overflow-hidden">
+    <div data-tx="${t.id}" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 flex flex-row-reverse items-center gap-4 hover:bg-surface-container-low transition-colors cursor-pointer relative overflow-hidden">
       <div class="absolute right-0 top-0 bottom-0 w-1 ${stripColor}"></div>
       <div class="w-12 h-12 rounded-lg ${iconBg} flex items-center justify-center flex-shrink-0">
         <span class="material-symbols-outlined ${iconFg}">${isIncome ? "payments" : c.icon}</span>

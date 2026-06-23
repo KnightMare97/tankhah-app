@@ -21,7 +21,7 @@
 <div class="flex flex-row-reverse justify-between items-center px-margin-mobile h-14 w-full">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">account_balance_wallet</span>
-<h1 class="font-headline-sm text-headline-sm">ثبت تراکنش</h1>
+<h1 id="page-title" class="font-headline-sm text-headline-sm">ثبت تراکنش</h1>
 </div>
 <a href="./transactions.html" class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full">close</a>
 </div>
@@ -37,7 +37,7 @@
 
 <form id="tx-form" class="w-full max-w-lg px-margin-mobile py-xl flex flex-col gap-lg pb-32">
 <!-- مسئول پرداخت -->
-<div class="flex flex-col gap-xs text-right">
+<div id="payer-block" class="flex flex-col gap-xs text-right">
 <label class="font-label-bold text-label-bold text-on-surface-variant px-1">مسئول پرداخت</label>
 <div class="segmented-control p-1 rounded-xl flex flex-row-reverse w-full">
 <button type="button" data-paid="self" class="paid-item active flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface">خودم پرداخت کردم</button>
@@ -61,7 +61,7 @@
 <!-- نوع تراکنش -->
 <div class="segmented-control p-1 rounded-xl flex flex-row-reverse w-full">
 <button type="button" id="type-expense" data-type="expense" class="type-item active flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface">هزینه</button>
-<button type="button" id="type-income" data-type="income" class="type-item flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface-variant">درآمد</button>
+<button type="button" id="type-income" data-type="income" class="type-item flex-1 py-3 rounded-lg font-label-bold text-label-bold text-center transition-all duration-200 text-on-surface-variant">شارژ تنخواه</button>
 </div>
 
 <!-- مبلغ -->
@@ -78,7 +78,7 @@
 
 <div class="grid grid-cols-1 gap-md">
 <!-- دسته‌بندی -->
-<div class="flex flex-col gap-xs text-right">
+<div id="category-block" class="flex flex-col gap-xs text-right">
 <label class="font-label-bold text-label-bold text-on-surface-variant px-1">دسته‌بندی</label>
 <div class="relative">
 <select id="category" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 appearance-none font-body-md text-body-md text-on-surface">
@@ -96,7 +96,7 @@
 </div>
 <!-- شرح -->
 <div class="flex flex-col gap-xs text-right">
-<label class="font-label-bold text-label-bold text-on-surface-variant px-1">شرح یا فروشنده</label>
+<label id="title-label" class="font-label-bold text-label-bold text-on-surface-variant px-1">شرح یا فروشنده</label>
 <input id="title" class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 font-body-md text-body-md text-on-surface" placeholder="مثلاً: خرید ملزومات اداری" type="text"/>
 </div>
 <!-- تاریخ -->

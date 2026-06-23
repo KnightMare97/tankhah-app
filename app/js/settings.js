@@ -14,10 +14,14 @@
   });
 
   $("change-pw-btn").addEventListener("click", async () => {
-    const pw = prompt("رمز عبور جدید (حداقل ۶ کاراکتر):");
-    if (!pw) return;
-    if (pw.length < 6) return toast("رمز باید حداقل ۶ کاراکتر باشد", "error");
-    const { error } = await sb.auth.updateUser({ password: pw });
+    const vals = await Modal.form({
+      title: "تغییر رمز عبور",
+      fields: [{ id: "pw", label: "رمز عبور جدید (حداقل ۶ کاراکتر)", type: "password", required: true, placeholder: "••••••••" }],
+      submitText: "تغییر رمز",
+    });
+    if (!vals) return;
+    if (vals.pw.length < 6) return toast("رمز باید حداقل ۶ کاراکتر باشد", "error");
+    const { error } = await sb.auth.updateUser({ password: vals.pw });
     if (error) return toast("خطا در تغییر رمز: " + error.message, "error");
     toast("رمز عبور تغییر کرد ✅");
   });
@@ -56,7 +60,7 @@
         "تاریخ": t.transaction_date,
         "شرح / فروشنده": t.title || "",
         "دسته‌بندی": categoryMeta(t.category).label,
-        "نوع": t.type === "income" ? "درآمد" : "هزینه",
+        "نوع": t.type === "income" ? "شارژ" : "هزینه",
         "مبلغ (تومان)": t.amount,
         "مسئول پرداخت": t.paid_by === "contact" ? "همکار (طلب)" : "صندوق",
         "همکار": t.contacts?.name || "",
@@ -89,13 +93,16 @@
 
   // ---- پاکسازی تاریخچه ----
   $("reset-btn").addEventListener("click", async () => {
-    if (!confirm("آیا مطمئنید؟ تمام تراکنش‌ها برای همیشه پاک می‌شوند.")) return;
-    if (!confirm("این عمل قابل بازگشت نیست. تأیید نهایی؟")) return;
+    const ok = await Modal.confirm({
+      title: "پاکسازی تاریخچه",
+      message: "تمام تراکنش‌ها برای همیشه پاک می‌شوند. این عمل قابل بازگشت نیست. مطمئنید؟",
+      confirmText: "پاک کن", danger: true,
+    });
+    if (!ok) return;
     try {
       const { error } = await sb.from("transactions").delete().neq("id", "00000000-0000-0000-0000-000000000000");
       if (error) throw error;
-      await sb.from("contacts").update({ debt_amount: 0 }).neq("id", "00000000-0000-0000-0000-000000000000");
-      toast("تاریخچه پاک شد");
+      toast("تاریخچه پاک شد ✅");
     } catch (e) {
       console.error(e);
       toast("خطا در پاکسازی", "error");
