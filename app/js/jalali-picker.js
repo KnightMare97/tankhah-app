@@ -103,10 +103,25 @@
     const base = input.dataset.iso ? JDate.isoToJalaali(input.dataset.iso) : todayJ();
     viewY = base.jy; viewM = base.jm;
     render();
+    pop.classList.remove("hidden"); // ابتدا نمایش تا بتوان ابعاد واقعی را اندازه گرفت
+
     const r = input.getBoundingClientRect();
-    pop.style.top = (r.bottom + window.scrollY + 6) + "px";
-    pop.style.left = (r.left + window.scrollX) + "px";
-    pop.classList.remove("hidden");
+    const margin = 8;
+    const popW = pop.offsetWidth || 288;
+    const popH = pop.offsetHeight || 320;
+    const vw = document.documentElement.clientWidth;
+    const vh = window.innerHeight;
+
+    // افقی: لبه‌ی راستِ تقویم هم‌تراز با لبه‌ی راستِ فیلد (RTL)، سپس clamp داخل صفحه
+    let left = r.right - popW;
+    left = Math.max(margin, Math.min(left, vw - popW - margin));
+
+    // عمودی: زیر فیلد؛ اگر پایین جا نبود، بالای فیلد باز شود
+    let top = r.bottom + 6;
+    if (top + popH > vh - margin && r.top - popH - 6 > margin) top = r.top - popH - 6;
+
+    pop.style.left = (left + window.scrollX) + "px";
+    pop.style.top = (top + window.scrollY) + "px";
   }
 
   function hide() { if (pop) pop.classList.add("hidden"); }
