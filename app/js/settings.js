@@ -151,21 +151,19 @@
 
   function renderCards(list) {
     if (!list.length) {
-      $("cards-list").innerHTML = `<div class="text-center text-on-surface-variant py-6 text-sm border border-dashed border-outline-variant rounded-lg">هنوز کارتی تعریف نشده — با دکمه‌ی «افزودن» شروع کنید</div>`;
+      $("cards-list").innerHTML = `<div style="text-align:center;color:#5b647a;padding:22px 12px;font-size:13px;border:1px dashed #ccd6e3;border-radius:10px;background:#fff;">هنوز کارتی تعریف نشده — با دکمه‌ی «افزودن» شروع کنید</div>`;
       return;
     }
     $("cards-list").innerHTML = list.map((c) => `
-      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 flex items-center justify-between">
-        <div class="flex items-center gap-3 flex-row-reverse">
-          <div class="w-10 h-10 bg-secondary-fixed rounded-lg flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-on-secondary-container">credit_card</span>
-          </div>
-          <div class="text-right">
-            <div class="font-body-lg text-on-surface">${escapeHtml(c.name)}</div>
-            <div class="text-xs currency-font ${c._bal < 0 ? "text-error" : "text-on-surface-variant"}">موجودی: ${c._bal < 0 ? "−" : ""}${formatToman(c._bal)} تومان</div>
+      <div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;box-shadow:0 1px 2px rgba(19,27,46,.06);padding:13px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:11px;flex-direction:row-reverse;">
+          <div style="width:40px;height:40px;border-radius:9px;background:#e9f0f8;color:#131b2e;display:flex;align-items:center;justify-content:center;flex:none;"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="2.5" y="5" width="19" height="14" rx="3"/><rect x="2.5" y="8.2" width="19" height="2.6" fill="#fea619"/></svg></div>
+          <div style="text-align:right;">
+            <div style="font-size:14.5px;font-weight:800;color:#131b2e;">${escapeHtml(c.name)}</div>
+            <div class="currency-font" style="font-size:12px;color:${c._bal < 0 ? "#ba1a1a" : "#8a93a6"};">موجودی: ${c._bal < 0 ? "−" : ""}${formatToman(c._bal)} تومان</div>
           </div>
         </div>
-        <button data-card="${c.id}" class="w-9 h-9 rounded-full hover:bg-surface-container-low flex items-center justify-center shrink-0">
+        <button data-card="${c.id}" style="width:36px;height:36px;border-radius:50%;border:none;background:transparent;color:#8a93a6;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer;">
           <span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
         </button>
       </div>`).join("");

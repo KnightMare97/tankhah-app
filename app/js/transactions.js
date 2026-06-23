@@ -58,9 +58,9 @@
     const items = ALL.filter(matches);
     const box = $("tx-groups");
     if (!items.length) {
-      box.innerHTML = `<div class="text-center text-on-surface-variant py-12 font-body-md">
-        <span class="material-symbols-outlined text-5xl text-outline-variant block mb-2">receipt_long</span>
-        تراکنشی برای نمایش وجود ندارد</div>`;
+      box.innerHTML = `<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;box-shadow:0 1px 2px rgba(19,27,46,.06);padding:30px 18px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;">
+        <span style="width:52px;height:52px;border-radius:50%;background:#e9f0f8;color:#131b2e;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" width="27" height="27" fill="currentColor"><rect x="3" y="5" width="18" height="2.6" rx="1.3"/><rect x="3" y="10.7" width="18" height="2.6" rx="1.3"/><rect x="3" y="16.4" width="12" height="2.6" rx="1.3"/></svg></span>
+        <span style="font-size:14.5px;font-weight:800;color:#131b2e;">تراکنشی برای نمایش نیست</span></div>`;
       return;
     }
 
@@ -128,11 +128,8 @@
     const isIncome = t.type === "income";
     const isSettlement = t.type === "settlement";
     const isDebt = t.type === "expense" && t.paid_by === "contact";
-    const stripColor = isIncome ? "bg-[#1b5e20]" : isSettlement ? "bg-[#00695c]" : isDebt ? "bg-secondary-container" : "bg-error";
-    const iconBg = isIncome || isSettlement ? "bg-tertiary-fixed" : isDebt ? "bg-secondary-fixed" : "bg-error-container";
-    const iconFg = isIncome || isSettlement ? "text-on-tertiary-fixed" : isDebt ? "text-on-secondary-container" : "text-error";
-    const amountColor = isIncome || isSettlement ? "" : isDebt ? "text-secondary" : "text-error";
-    const amountStyle = isIncome ? 'style="color:#1b5e20"' : isSettlement ? 'style="color:#00695c"' : "";
+    const strip = isIncome ? "#1f9d57" : isSettlement ? "#00695c" : isDebt ? "#fea619" : "#ba1a1a";
+    const amtColor = isIncome ? "#1f9d57" : isSettlement ? "#00695c" : isDebt ? "#c47a00" : "#ba1a1a";
     const sign = isIncome ? "+" : "−";
     const icon = isIncome ? "payments" : isSettlement ? "handshake" : c.icon;
     const heading = t.title || (isSettlement ? "تسویه" : c.label);
@@ -143,18 +140,16 @@
     const subtitle = (parts.length ? parts.join(" • ") + " • " : "") + timeOf(t.created_at);
 
     return `
-    <div data-tx="${t.id}" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 flex flex-row-reverse items-center gap-4 hover:bg-surface-container-low transition-colors cursor-pointer relative overflow-hidden">
-      <div class="absolute right-0 top-0 bottom-0 w-1 ${stripColor}"></div>
-      <div class="w-12 h-12 rounded-lg ${iconBg} flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined ${iconFg}">${icon}</span>
+    <div data-tx="${t.id}" style="position:relative;background:#fff;border:1px solid #dbe3ee;border-radius:10px;box-shadow:0 1px 2px rgba(19,27,46,.06);padding:13px;display:flex;flex-direction:row-reverse;align-items:center;gap:13px;cursor:pointer;overflow:hidden;">
+      <div style="position:absolute;top:0;bottom:0;right:0;width:5px;background:${strip};"></div>
+      <div style="width:44px;height:44px;border-radius:9px;background:#e9f0f8;display:flex;align-items:center;justify-content:center;flex:none;"><span class="material-symbols-outlined" style="color:#131b2e;">${icon}</span></div>
+      <div style="flex:1;min-width:0;text-align:right;">
+        <div style="font-size:14px;font-weight:800;color:#131b2e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(heading)}</div>
+        <div style="font-size:11.5px;color:#8a93a6;">${escapeHtml(subtitle)}</div>
       </div>
-      <div class="flex-grow text-right">
-        <h3 class="font-headline-sm text-sm text-on-surface">${escapeHtml(heading)}</h3>
-        <p class="text-xs text-on-surface-variant">${escapeHtml(subtitle)}</p>
-      </div>
-      <div class="text-left">
-        <p class="font-data-display text-lg ${amountColor} currency-font" ${amountStyle}>${sign}${formatToman(t.amount)}</p>
-        <p class="text-[10px] text-outline">تومان</p>
+      <div style="text-align:left;flex:none;">
+        <div class="currency-font" style="font-size:16px;font-weight:800;color:${amtColor};">${sign}${formatToman(t.amount)}</div>
+        <div style="font-size:10px;color:#8a93a6;">تومان</div>
       </div>
     </div>`;
   }

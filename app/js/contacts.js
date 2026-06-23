@@ -33,9 +33,10 @@
     $("total-debt").textContent = formatToman(list.reduce((s, c) => s + c._debt, 0));
 
     if (!list.length) {
-      $("contacts-list").innerHTML = `<div class="text-center text-on-surface-variant py-12 font-body-md">
-        <span class="material-symbols-outlined text-5xl text-outline-variant block mb-2">group</span>
-        هنوز همکاری ثبت نشده است<br/><span class="text-xs">از دکمه‌ی + بالا اضافه کنید</span></div>`;
+      $("contacts-list").innerHTML = `<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;box-shadow:0 1px 2px rgba(19,27,46,.06);padding:26px 18px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;">
+        <span style="width:50px;height:50px;border-radius:50%;background:#e9f0f8;color:#131b2e;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><circle cx="9" cy="8" r="3.4"/><path d="M2.6 19.2c0-3.2 2.86-5.4 6.4-5.4s6.4 2.2 6.4 5.4v.8H2.6z"/><circle cx="17.6" cy="9" r="2.7"/><path d="M16 14.1c3 .1 5.4 2 5.4 4.9v.8h-4.2v-.6c0-2-.86-3.8-2.2-5.1z"/></svg></span>
+        <span style="font-size:14.5px;font-weight:800;color:#131b2e;">هنوز همکاری ثبت نشده</span>
+        <span style="font-size:12.5px;color:#5b647a;">از دکمه‌ی + بالا یک همکار اضافه کنید.</span></div>`;
       return;
     }
 
@@ -51,24 +52,21 @@
     const hasDebt = c._debt > 0;
     const initials = (c.name || "?").trim().charAt(0);
     return `
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex flex-col gap-3 relative overflow-hidden hover:shadow-md transition-shadow">
-      <div class="absolute right-0 top-0 bottom-0 w-1 ${hasDebt ? "bg-error" : "bg-[#1b5e20]"}"></div>
-      <div class="flex flex-row-reverse items-center gap-4">
-        <div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center flex-shrink-0 font-headline-sm text-on-secondary-container">${escapeHtml(initials)}</div>
-        <div class="flex-grow text-right">
-          <h3 class="font-headline-sm text-base text-on-surface">${escapeHtml(c.name)}</h3>
-          <p class="text-xs text-on-surface-variant">${escapeHtml(c.unit || "—")}</p>
+    <div style="position:relative;background:#fff;border:1px solid #dbe3ee;border-radius:10px;box-shadow:0 1px 2px rgba(19,27,46,.06);padding:15px;overflow:hidden;">
+      <div style="position:absolute;top:0;bottom:0;right:0;width:5px;background:${hasDebt ? "#ba1a1a" : "#1f9d57"};"></div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:46px;height:46px;border-radius:50%;background:#e9f0f8;display:flex;align-items:center;justify-content:center;flex:none;font-size:18px;font-weight:800;color:#131b2e;">${escapeHtml(initials)}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:15px;font-weight:800;color:#131b2e;">${escapeHtml(c.name)}</div>
+          <div style="font-size:11.5px;color:#8a93a6;">${escapeHtml(c.unit || "—")}</div>
         </div>
-        <div class="text-left">
-          <p class="font-data-display text-lg currency-font ${hasDebt ? "text-error" : "text-on-surface-variant"}">${formatToman(c._debt)}</p>
-          <p class="text-[10px] text-outline">تومان بدهی</p>
+        <div style="text-align:left;">
+          <div class="currency-font" style="font-size:17px;font-weight:800;color:${hasDebt ? "#ba1a1a" : "#8a93a6"};">${formatToman(c._debt)}</div>
+          <div style="font-size:10px;color:#8a93a6;">تومان بدهی</div>
         </div>
-        <button id="menu-${c.id}" class="w-9 h-9 rounded-full hover:bg-surface-container-low flex items-center justify-center flex-shrink-0">
-          <span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
-        </button>
+        <button id="menu-${c.id}" style="width:36px;height:36px;border-radius:50%;border:none;background:transparent;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer;color:#8a93a6;"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
       </div>
-      ${hasDebt ? `<button id="settle-${c.id}" class="w-full h-10 bg-secondary-container text-on-secondary-container rounded-lg font-label-bold text-label-bold active:scale-95 transition-transform flex items-center justify-center gap-1">
-        <span class="material-symbols-outlined text-[18px]">check_circle</span> تسویه بدهی</button>` : ""}
+      ${hasDebt ? `<button id="settle-${c.id}" style="margin-top:12px;width:100%;height:42px;background:#fea619;color:#131b2e;border:none;border-radius:9px;font-family:inherit;font-size:13.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M9.6 16.2 5.4 12l-1.4 1.4 5.6 5.6L20.4 7.8 19 6.4z"/></svg>ثبت تسویه</button>` : ""}
     </div>`;
   }
 
