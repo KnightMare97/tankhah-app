@@ -1,5 +1,5 @@
 // سرویس‌ورکر ساده برای PWA — کش پوسته‌ی اپ (offline shell)
-const CACHE = "tankhah-v12";
+const CACHE = "tankhah-v13";
 const SHELL = [
   "./",
   "./index.html",
