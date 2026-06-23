@@ -29,87 +29,88 @@
 </div>
 </div>
 </header>
-<main class="px-margin-mobile pt-lg max-w-md mx-auto">
-<!-- Main Balance Card -->
-<div class="relative overflow-hidden rounded-xl bg-primary-container text-on-primary-fixed mb-lg p-lg shadow-sm border border-outline-variant hover:shadow-md">
-<div class="relative z-10">
-<div class="flex justify-between items-center mb-base">
-<span class="font-label-bold text-label-bold text-on-primary-container">موجودی فعلی</span>
-<span class="material-symbols-outlined text-secondary-container">account_balance_wallet</span>
+<main class="max-w-md mx-auto px-4 pt-4 flex flex-col gap-[18px]" dir="rtl">
+
+<!-- موجودی کل تنخواه -->
+<div style="position:relative;overflow:hidden;background:#131b2e;border-radius:14px;padding:22px;box-shadow:0 14px 30px -12px rgba(19,27,46,.5);">
+<div style="position:absolute;top:-40px;left:-30px;width:150px;height:150px;border-radius:50%;background:rgba(254,166,25,.10);"></div>
+<div style="position:absolute;bottom:-60px;left:40px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.04);"></div>
+<div style="position:relative;display:flex;align-items:center;justify-content:space-between;">
+<span style="font-size:13px;font-weight:600;color:#8a93a6;letter-spacing:.05em;">موجودی کل تنخواه</span>
+<span style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:#fea619;"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H17a1 1 0 0 1 0 2H6.5a.5.5 0 0 0 0 1H19a2 2 0 0 1 2 2v8a2.5 2.5 0 0 1-2.5 2.5h-12A2.5 2.5 0 0 1 2 17V6.5z"/></svg></span>
 </div>
-<div class="flex items-baseline gap-2 mt-xs">
-<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-white currency-font" id="balance">—</h1>
-<span class="text-body-md font-body-md text-on-primary-container opacity-80">تومان</span>
+<div style="position:relative;margin-top:14px;display:flex;align-items:baseline;gap:8px;">
+<span id="balance" class="currency-font" style="font-size:36px;font-weight:800;line-height:1;color:#fff;letter-spacing:-.02em;">—</span>
+<span style="font-size:15px;font-weight:600;color:#8a93a6;">تومان</span>
 </div>
-<div class="mt-xl flex gap-xs items-center opacity-90">
-<span class="material-symbols-outlined text-[16px]">info</span>
-<p class="text-xs font-body-md" id="updated-at">به‌روزرسانی شده: هم‌اکنون</p>
-</div>
-</div>
-</div>
-<!-- Summary Grid -->
-<div class="grid grid-cols-2 gap-md mb-lg">
-<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col gap-xs hover:shadow-md">
-<div class="flex items-center gap-xs text-error">
-<span class="material-symbols-outlined text-[20px]">trending_down</span>
-<span class="font-label-bold text-label-bold">کل هزینه‌ها</span>
-</div>
-<div class="mt-xs">
-<span class="font-headline-sm text-headline-sm currency-font" id="total-expenses">—</span>
-<span class="text-[10px] font-body-md text-on-surface-variant">تومان</span>
+<div style="position:relative;margin-top:16px;display:flex;align-items:center;gap:9px;">
+<span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:#d7f0e0;background:rgba(21,122,74,.32);padding:4px 10px;border-radius:999px;font-weight:700;"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M9.6 16.2 5.4 12l-1.4 1.4 5.6 5.6L20.4 7.8 19 6.4z"/></svg>همگام شد</span>
+<span id="card-count" style="font-size:12px;color:#8a93a6;">—</span>
 </div>
 </div>
-<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col gap-xs hover:shadow-md">
-<div class="flex items-center gap-xs text-secondary">
-<span class="material-symbols-outlined text-[20px]">pending_actions</span>
-<span class="font-label-bold text-label-bold">مجموع بدهی</span>
-</div>
-<div class="mt-xs">
-<span class="font-headline-sm text-headline-sm currency-font" id="total-debt">—</span>
-<span class="text-[10px] font-body-md text-on-surface-variant">تومان</span>
-</div>
-</div>
-</div>
-<!-- موجودی کارت‌ها -->
-<section id="cards-section" class="mb-lg hidden">
-<div class="flex justify-between items-center mb-md">
-<h2 class="font-headline-sm text-headline-sm text-on-surface">کارت‌ها</h2>
-<a href="./settings.html" class="text-secondary text-label-bold font-label-bold">مدیریت</a>
-</div>
-<div class="space-y-sm" id="cards-list"></div>
-</section>
-<!-- Quick Actions -->
-<div class="flex gap-md mb-xl">
-<a href="./add.html" class="flex-1 bg-secondary-container text-on-secondary-container h-12 rounded-lg flex items-center justify-center gap-2 font-label-bold text-label-bold shadow-sm active:scale-95 transition-all hover:shadow-md">
-<span class="material-symbols-outlined">add</span>
-ثبت هزینه جدید
-</a>
-<a href="./add.html?type=income" class="flex-1 border border-primary-container text-primary-container h-12 rounded-lg flex items-center justify-center gap-2 font-label-bold text-label-bold active:scale-95 transition-all"><span class="material-symbols-outlined">input</span>درخواست شارژ</a>
-</div>
-<!-- Recent Activity Section -->
-<div class="mb-lg">
-<div class="flex justify-between items-center mb-md">
-<h2 class="font-headline-sm text-headline-sm text-on-surface">اقدامات لازم</h2>
-<a href="./transactions.html" class="text-secondary text-label-bold font-label-bold">مشاهده همه</a>
-</div>
-<!-- Transaction List (dynamic) -->
-<div class="space-y-sm" id="actions-list">
-<div class="skeleton h-16 rounded-lg"></div>
-<div class="skeleton h-16 rounded-lg"></div>
-</div>
-</div>
-<!-- Featured Analysis Card -->
-<div class="mb-lg grid grid-cols-1 gap-md">
-<div class="bg-tertiary-container text-white rounded-xl p-lg flex items-center justify-between hover:shadow-md">
+
+<!-- دو کارت آماری -->
+<div style="display:flex;gap:13px;">
+<div style="flex:1;background:#fff;border:1px solid #dbe3ee;border-radius:10px;box-shadow:0 1px 2px rgba(19,27,46,.06);padding:15px;display:flex;flex-direction:column;gap:11px;">
+<span style="width:38px;height:38px;border-radius:9px;background:#e9f0f8;color:#131b2e;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M9 2h6a1.5 1.5 0 0 1 1.5 1.5V4H18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1.5v-.5A1.5 1.5 0 0 1 9 2zm0 2v1.5h6V4H9z"/></svg></span>
 <div>
-<h4 class="font-headline-sm text-headline-sm mb-xs">تحلیل مخارج</h4>
-<p class="text-xs opacity-70" id="analysis-text">بیشترین هزینه در حال محاسبه است…</p>
-</div>
-<div class="w-12 h-12 bg-on-tertiary-container/20 rounded-full flex items-center justify-center">
-<span class="material-symbols-outlined text-on-tertiary-fixed">insights</span>
+<div style="font-size:12.5px;color:#5b647a;font-weight:600;">مجموع بدهی</div>
+<div style="margin-top:4px;display:flex;align-items:baseline;gap:4px;"><span id="total-debt" class="currency-font" style="font-size:19px;font-weight:800;color:#131b2e;">—</span><span style="font-size:11.5px;color:#8a93a6;">تومان</span></div>
+<div id="debt-sub" style="margin-top:5px;font-size:11px;color:#c47a00;font-weight:700;">—</div>
 </div>
 </div>
+<div style="flex:1;background:#fff;border:1px solid #dbe3ee;border-radius:10px;box-shadow:0 1px 2px rgba(19,27,46,.06);padding:15px;display:flex;flex-direction:column;gap:11px;">
+<span style="width:38px;height:38px;border-radius:9px;background:#fdeaea;color:#ba1a1a;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M11 3h2v12.2l4.3-4.3 1.4 1.4L12 19 5.3 12.3l1.4-1.4L11 15.2z"/></svg></span>
+<div>
+<div style="font-size:12.5px;color:#5b647a;font-weight:600;">کل هزینه‌ها</div>
+<div style="margin-top:4px;display:flex;align-items:baseline;gap:4px;"><span id="total-expenses" class="currency-font" style="font-size:19px;font-weight:800;color:#ba1a1a;">—</span><span style="font-size:11.5px;color:#8a93a6;">تومان</span></div>
+<div style="margin-top:5px;font-size:11px;color:#8a93a6;font-weight:700;">همه‌ی دوره‌ها</div>
 </div>
+</div>
+</div>
+
+<!-- کارت‌ها و صندوق -->
+<section id="accounts-section" style="display:none;">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+<span style="font-size:16px;font-weight:800;color:#131b2e;">کارت‌ها و صندوق</span>
+<a href="./settings.html" style="font-size:13px;font-weight:700;color:#c47a00;text-decoration:none;">مدیریت</a>
+</div>
+<div id="accounts-strip" class="no-scrollbar" style="display:flex;gap:12px;overflow-x:auto;margin:0 -16px;padding:2px 16px 6px;"></div>
+</section>
+
+<!-- دکمه‌های اقدام -->
+<div style="display:flex;gap:12px;">
+<a href="./add.html" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:#fea619;color:#131b2e;border-radius:10px;padding:15px 8px;font-size:15px;font-weight:800;text-decoration:none;box-shadow:0 8px 18px -6px rgba(254,166,25,.6);"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M10.7 4h2.6v6.7H20v2.6h-6.7V20h-2.6v-6.7H4v-2.6h6.7z"/></svg>ثبت هزینه</a>
+<a href="./add.html?type=income" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#131b2e;border:1px solid #ccd6e3;border-radius:10px;padding:15px 8px;font-size:15px;font-weight:800;text-decoration:none;"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M11 3h2v8.2l2.6-2.6 1.4 1.4L12 15.4 6.99 10.4l1.4-1.4L11 11.6z"/><path d="M4 17h16v3.2H4z"/></svg>درخواست شارژ</a>
+</div>
+
+<!-- اقدامات لازم -->
+<div>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+<span style="font-size:16px;font-weight:800;color:#131b2e;">اقدامات لازم</span>
+<a href="./transactions.html" style="font-size:13px;font-weight:700;color:#c47a00;text-decoration:none;">مشاهده همه</a>
+</div>
+<div id="actions-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+</div>
+
+<!-- نمودار خرج‌کرد (میله‌ای + سه تب زمانی) -->
+<div style="background:#0f1626;border-radius:12px;padding:18px 18px 16px;box-shadow:0 14px 30px -14px rgba(19,27,46,.5);">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;">
+<div style="display:flex;flex-direction:column;gap:4px;">
+<span style="font-size:14.5px;font-weight:800;color:#fff;">خرج‌کرد</span>
+<span id="chart-total" style="font-size:11.5px;color:#9aa6b8;">—</span>
+</div>
+<span style="width:36px;height:36px;border-radius:10px;background:rgba(254,166,25,.16);color:#fea619;display:flex;align-items:center;justify-content:center;flex:none;"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="3" y="12" width="4" height="8" rx="1.3"/><rect x="10" y="6" width="4" height="14" rx="1.3"/><rect x="17" y="9" width="4" height="11" rx="1.3"/></svg></span>
+</div>
+<div id="chart-tabs" style="margin-top:14px;display:flex;gap:4px;background:rgba(255,255,255,.06);padding:4px;border-radius:8px;">
+<button type="button" data-range="7d" style="flex:1;padding:9px 4px;border:none;border-radius:6px;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;">۷ روز اخیر</button>
+<button type="button" data-range="1m" style="flex:1;padding:9px 4px;border:none;border-radius:6px;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;">ماه اخیر</button>
+<button type="button" data-range="3m" style="flex:1;padding:9px 4px;border:none;border-radius:6px;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;">۳ ماه اخیر</button>
+</div>
+<div id="chart-bars" style="margin-top:17px;display:flex;align-items:flex-end;gap:9px;height:124px;"></div>
+<div id="chart-labels" style="margin-top:10px;display:flex;gap:9px;"></div>
+</div>
+
 </main>
 <!-- FAB -->
 <a href="./add.html" class="fixed bottom-24 left-6 w-14 h-14 bg-secondary-container text-on-secondary-container rounded-full shadow-lg flex items-center justify-center z-50 active:scale-90 transition-transform">
