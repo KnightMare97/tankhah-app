@@ -1,5 +1,5 @@
 // سرویس‌ورکر ساده برای PWA — کش پوسته‌ی اپ (offline shell)
-const CACHE = "tankhah-v14";
+const CACHE = "tankhah-v15";
 const SHELL = [
   "./",
   "./index.html",
@@ -9,8 +9,8 @@ const SHELL = [
   "./contacts.html",
   "./settings.html",
   "./config.js",
+  "./css/tw.css",
   "./css/app.css",
-  "./js/theme.js",
   "./js/common.js",
   "./js/modal.js",
   "./js/jdate.js",
@@ -50,17 +50,21 @@ self.addEventListener("fetch", (e) => {
   // درخواست‌های Supabase و خارجی: همیشه از شبکه (کش نشود)
   if (url.origin !== location.origin) return;
 
-  // همه‌ی منابع هم‌مبدأ (HTML/JS/CSS/آیکون): network-first
-  // تا همیشه آخرین کد لود شود؛ کش فقط برای حالت آفلاین استفاده می‌شود.
+  // منابع هم‌مبدأ: stale-while-revalidate
+  // فوراً از کش سرو می‌شود (سریع) و نسخه‌ی تازه در پس‌زمینه به‌روزرسانی می‌شود.
+  // تازگیِ پس از انتشار با bump نسخه‌ی CACHE تضمین می‌شود (کش قدیمی در activate پاک می‌شود).
   e.respondWith(
-    fetch(req)
-      .then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => c.put(req, copy));
-        return res;
-      })
-      .catch(() =>
-        caches.match(req).then((r) => r || (req.mode === "navigate" ? caches.match("./index.html") : undefined))
-      )
+    caches.match(req).then((cached) => {
+      const network = fetch(req)
+        .then((res) => {
+          if (res && res.status === 200) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => cached || (req.mode === "navigate" ? caches.match("./index.html") : undefined));
+      return cached || network;
+    })
   );
 });
