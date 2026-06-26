@@ -227,6 +227,11 @@
         if (/\.pdf($|\?)/i.test(data.image_url)) showFileChosen("فایل فعلی — برای تغییر بزنید");
         else showPreview(data.image_url, "تصویر فعلی — برای تغییر بزنید");
       }
+      // برچسب تیک تلگرام در حالت ویرایش
+      if (data.telegram_message_id) {
+        $("tg-toggle-title").textContent = "به‌روزرسانی در تلگرام";
+        $("tg-toggle-hint").textContent = "تغییرات در پیام گروه «تنخواه فراز» هم اعمال شود.";
+      }
     } else {
       $("date").dataset.iso = localDateStr();
       $("date").value = JalaliPicker.shamsiText(localDateStr());
@@ -272,7 +277,13 @@
         image_url,
       };
 
+      let txId = editId;
+      const sendTg = $("send-telegram").checked;
+      const wasSent = !!(original && original.telegram_message_id);
+
       if (editId) {
+        // اگر قبلاً به تلگرام رفته، تا زمان همگام‌شدن دوباره، علامت «تغییر کرده» بخورد
+        if (wasSent) row.telegram_synced = false;
         const { error } = await sb.from("transactions").update(row).eq("id", editId);
         if (error) throw error;
         if (selectedFile && original && original.image_url && original.image_url !== image_url) {
@@ -281,11 +292,21 @@
         }
         toast("تغییرات ذخیره شد ✅");
       } else {
-        const { error } = await sb.from("transactions").insert(row);
+        const { data: ins, error } = await sb.from("transactions").insert(row).select("id").single();
         if (error) throw error;
+        txId = ins.id;
         toast(kind === "income" ? "شارژ ثبت شد ✅" : "تراکنش ثبت شد ✅");
       }
-      setTimeout(() => (location.href = "./transactions.html"), 800);
+
+      // ارسال یا به‌روزرسانی پیام تلگرام (در صورت تیک)
+      if (sendTg && txId) {
+        btn.innerHTML = `<span class="material-symbols-outlined animate-spin">autorenew</span> در حال ارسال به تلگرام…`;
+        const res = await telegramNotify(wasSent ? "update" : "send", txId);
+        if (!res.ok) toast("ذخیره شد، اما ارسال تلگرام ناموفق بود: " + (res.error || ""), "error");
+        else toast(wasSent ? "در تلگرام به‌روزرسانی شد ✈️" : "به تلگرام ارسال شد ✈️");
+      }
+
+      setTimeout(() => (location.href = "./transactions.html"), 700);
     } catch (err) {
       console.error(err);
       toast("خطا در ذخیره: " + (err.message || ""), "error");

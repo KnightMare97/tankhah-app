@@ -127,6 +127,27 @@ function toast(message, kind = "success") {
   }, 2600);
 }
 
+// ---------------------------------------------------------------------------
+//  تلگرام: صدا زدن Edge Function برای ارسال/به‌روزرسانی/حذف پیام
+//  action: "send" | "update" | "delete"  —  خروجی: { ok, ... } یا { ok:false, error }
+// ---------------------------------------------------------------------------
+async function telegramNotify(action, id) {
+  try {
+    const { data, error } = await sb.functions.invoke("telegram-notify", {
+      body: { action, id },
+    });
+    if (error) {
+      // پیام خطای بدنه‌ی تابع را در صورت وجود بیرون بکش
+      let msg = error.message || "";
+      try { msg = (await error.context?.json())?.error || msg; } catch {}
+      return { ok: false, error: msg };
+    }
+    return data || { ok: false, error: "پاسخی دریافت نشد" };
+  } catch (e) {
+    return { ok: false, error: String(e?.message || e) };
+  }
+}
+
 // ثبت سرویس‌ورکر برای PWA
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {

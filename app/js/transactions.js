@@ -5,6 +5,18 @@
   let filter = "all";
   let query = "";
 
+  const TG_PLANE = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21.9 4.3 18.7 19.4c-.24 1.07-.88 1.33-1.78.83l-4.92-3.63-2.37 2.28c-.26.26-.48.48-.99.48l.35-5 9.1-8.22c.4-.35-.09-.55-.61-.2L4.62 13.1.78 11.9c-1.04-.33-1.06-1.04.22-1.54L20.6 2.84c.86-.32 1.62.2 1.3 1.46z"/></svg>`;
+  const TG_SYNC = `<svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M12 6V3L8 7l4 4V8a4 4 0 0 1 4 4h2a6 6 0 0 0-6-6zm0 12a4 4 0 0 1-4-4H6a6 6 0 0 0 6 6v3l4-4-4-4v3z"/></svg>`;
+
+  // نشانگر وضعیت تلگرام برای هر تراکنش
+  function tgChip(t) {
+    if (t.telegram_message_id && t.telegram_synced)
+      return `<span title="ارسال‌شده به تلگرام" style="flex:none;color:#229ED9;display:inline-flex;align-items:center;">${TG_PLANE}</span>`;
+    if (t.telegram_message_id && !t.telegram_synced)
+      return `<span title="تغییر کرده — در تلگرام به‌روز نشده" style="flex:none;display:inline-flex;align-items:center;gap:3px;background:#fff6e7;color:#8a5300;border-radius:5px;padding:1px 5px;font-size:9px;font-weight:800;">${TG_SYNC}تغییر کرده</span>`;
+    return "";
+  }
+
   load();
 
   async function load() {
@@ -96,13 +108,27 @@
     if (!t) return;
     const isSettlement = t.type === "settlement";
     const label = t.title || (isSettlement ? "تسویه" : categoryMeta(t.category).label);
+
+    // اقدام‌های تلگرام بسته به وضعیت
+    const tgItems = [];
+    if (!t.telegram_message_id) tgItems.push({ label: "الان بفرست به تلگرام", icon: "send", value: "tg_send" });
+    else if (!t.telegram_synced) tgItems.push({ label: "به‌روزرسانی در تلگرام", icon: "sync", value: "tg_update" });
+
     // تسویه از طریق فرم ثبت ویرایش نمی‌شود؛ فقط حذف
     const items = isSettlement
-      ? [{ label: "حذف تسویه", icon: "delete", value: "delete", danger: true }]
-      : [{ label: "ویرایش", icon: "edit", value: "edit" }, { label: "حذف", icon: "delete", value: "delete", danger: true }];
+      ? [...tgItems, { label: "حذف تسویه", icon: "delete", value: "delete", danger: true }]
+      : [{ label: "ویرایش", icon: "edit", value: "edit" }, ...tgItems, { label: "حذف", icon: "delete", value: "delete", danger: true }];
     const choice = await Modal.actions({ title: escapeHtml(label), items });
     if (choice === "edit") {
       location.href = "./add.html?id=" + encodeURIComponent(id);
+    } else if (choice === "tg_send" || choice === "tg_update") {
+      toast(choice === "tg_send" ? "در حال ارسال به تلگرام…" : "در حال به‌روزرسانی…");
+      const res = await telegramNotify(choice === "tg_send" ? "send" : "update", id);
+      if (!res.ok) return toast("تلگرام ناموفق: " + (res.error || ""), "error");
+      t.telegram_message_id = res.message_id ?? t.telegram_message_id;
+      t.telegram_synced = true;
+      render();
+      toast(choice === "tg_send" ? "به تلگرام ارسال شد ✈️" : "در تلگرام به‌روزرسانی شد ✈️");
     } else if (choice === "delete") {
       const ok = await Modal.confirm({
         title: isSettlement ? "حذف تسویه" : "حذف تراکنش",
@@ -110,6 +136,18 @@
         confirmText: "حذف", danger: true,
       });
       if (!ok) return;
+      // اگر این تراکنش به تلگرام رفته، هر بار بپرس پیام تلگرام هم حذف شود یا نه
+      if (t.telegram_message_id) {
+        const alsoTg = await Modal.confirm({
+          title: "پیام تلگرام",
+          message: "پیام این تراکنش در گروه «تنخواه فراز» هم حذف شود؟",
+          confirmText: "بله، حذف شود", cancelText: "نه، بماند", danger: true,
+        });
+        if (alsoTg) {
+          const r = await telegramNotify("delete", id);
+          if (!r.ok) toast("حذف پیام تلگرام ناموفق بود: " + (r.error || ""), "error");
+        }
+      }
       const { error } = await sb.from("transactions").delete().eq("id", id);
       if (error) { console.error(error); return toast("خطا در حذف", "error"); }
       // حذف فایل فاکتور از Storage (جلوگیری از فایل بی‌استفاده)
@@ -145,7 +183,7 @@
       <div style="width:44px;height:44px;border-radius:9px;background:#e9f0f8;display:flex;align-items:center;justify-content:center;flex:none;"><span class="material-symbols-outlined" style="color:#131b2e;">${icon}</span></div>
       <div style="flex:1;min-width:0;text-align:right;">
         <div style="font-size:14px;font-weight:800;color:#131b2e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(heading)}</div>
-        <div style="font-size:11.5px;color:#8a93a6;">${escapeHtml(subtitle)}</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:#8a93a6;margin-top:2px;">${tgChip(t)}<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;">${escapeHtml(subtitle)}</span></div>
       </div>
       <div style="text-align:left;flex:none;">
         <div class="currency-font" style="font-size:16px;font-weight:800;color:${amtColor};">${sign}${formatToman(t.amount)}</div>
