@@ -74,22 +74,30 @@
 
   // ---- اقدامات لازم ----
   (function renderActions() {
-    const items = rows.filter((t) => t.status === "pending" && t.paid_by === "contact" && (perDebt[t.contact_id] || 0) > 0);
+    // اقدامات لازم = بدهیِ باقی‌ماندهٔ هر همکار (خالص: مجموع طلب − مجموع تسویه).
+    // به‌ازای هر همکار یک ردیف؛ با تسویه‌ی جزئی/کامل، مبلغ کم و در تسویه‌ی کامل حذف می‌شود.
+    const nameById = {};
+    for (const t of rows) if (t.contact_id && t.contacts?.name) nameById[t.contact_id] = t.contacts.name;
+    const debtors = Object.keys(perDebt)
+      .filter((cid) => perDebt[cid] > 0)
+      .map((cid) => ({ id: cid, name: nameById[cid] || "همکار", debt: perDebt[cid] }))
+      .sort((a, b) => b.debt - a.debt);
+
     const box = $("actions-list");
-    if (!items.length) {
+    if (!debtors.length) {
       box.innerHTML = `<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;box-shadow:0 1px 2px rgba(19,27,46,.06);padding:22px 18px;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;">
         <span style="width:50px;height:50px;border-radius:50%;background:#e7f6ee;color:#1f9d57;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" width="27" height="27" fill="currentColor"><path d="M9.6 16.2 5.4 12l-1.4 1.4 5.6 5.6L20.4 7.8 19 6.4z"/></svg></span>
         <span style="font-size:14.5px;font-weight:800;color:#131b2e;">اقدام معوقه‌ای وجود ندارد</span>
-        <span style="font-size:12.5px;color:#5b647a;">همه‌ی تراکنش‌ها بررسی و تأیید شده‌اند.</span></div>`;
+        <span style="font-size:12.5px;color:#5b647a;">بدهیِ بازی با همکاران نیست.</span></div>`;
       return;
     }
-    box.innerHTML = items.map((t) => {
-      const heading = t.contacts?.name ? `طلب ${t.contacts.name}` : (t.title || "طلب همکار");
+    box.innerHTML = debtors.map((d) => {
+      const heading = `طلب ${d.name}`;
       return `<a href="./contacts.html" style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:1px solid #dbe3ee;border-radius:10px;box-shadow:0 1px 2px rgba(19,27,46,.06);padding:14px;text-decoration:none;position:relative;overflow:hidden;">
         <span style="position:absolute;top:0;bottom:0;right:0;width:4px;background:#fea619;"></span>
         <div style="display:flex;align-items:center;gap:11px;">
           <span style="width:40px;height:40px;border-radius:9px;background:#e9f0f8;color:#131b2e;display:flex;align-items:center;justify-content:center;flex:none;"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="9" cy="8" r="3.4"/><path d="M2.6 19.2c0-3.2 2.86-5.4 6.4-5.4s6.4 2.2 6.4 5.4v.8H2.6z"/></svg></span>
-          <div><div style="font-size:14px;font-weight:800;color:#131b2e;">${escapeHtml(heading)}</div><div style="font-size:11.5px;color:#8a93a6;">طلب باز • ${formatToman(t.amount)} تومان</div></div>
+          <div><div style="font-size:14px;font-weight:800;color:#131b2e;">${escapeHtml(heading)}</div><div style="font-size:11.5px;color:#8a93a6;">بدهی باز • ${formatToman(d.debt)} تومان</div></div>
         </div>
         <span style="background:#131b2e;color:#fff;font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;flex:none;">بررسی</span>
       </a>`;
